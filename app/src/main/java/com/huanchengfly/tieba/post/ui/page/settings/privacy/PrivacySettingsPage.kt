@@ -25,7 +25,7 @@ import com.huanchengfly.tieba.post.ui.widgets.compose.MyScaffold
 import com.huanchengfly.tieba.post.ui.widgets.compose.TitleCentredToolbar
 import com.huanchengfly.tieba.post.utils.AppPrivacyManager
 import com.huanchengfly.tieba.post.utils.AppPrivacyManager.PrivacyData
-import com.huanchengfly.tieba.post.utils.toastShort
+import com.huanchengfly.tieba.post.toastShort
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 

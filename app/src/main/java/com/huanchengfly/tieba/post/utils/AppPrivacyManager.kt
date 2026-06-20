@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.huanchengfly.tieba.post.App
+import com.huanchengfly.tieba.post.api.retrofit.RetrofitTiebaApi
 
 object AppPrivacyManager {
     private const val PREFS_NAME = "privacy_settings"
