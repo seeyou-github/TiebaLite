@@ -60,6 +60,10 @@ android {
             useSupportLibrary = true
         }
         manifestPlaceholders["is_self_build"] = "$isSelfBuild"
+        val abiFilter = project.findProperty("abiFilter") as? String
+        if (abiFilter != null) {
+            ndk { abiFilters += abiFilter }
+        }
     }
     buildFeatures {
         compose = true

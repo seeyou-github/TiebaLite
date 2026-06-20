@@ -1,0 +1,71 @@
+name: Build Android arm-v8a
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Android arm-v8a APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Android arm64 APK
+        run: ./gradlew assembleRelease -PabiFilter=arm64-v8a
+
+      - name: Collect APK
+        run: |
+          mkdir -p build/artifacts
+          apk_path="$(find app/build/outputs -name '*.apk' -type f | head -n 1)"
+          if [ -z "$apk_path" ]; then
+            echo "No APK found"
+            find app/build/outputs -name '*.apk' -type f -print
+            exit 1
+          fi
+          cp "$apk_path" build/artifacts/tieba-lite-arm-v8a.apk
+
+      - name: Upload APK to tmpfile.link
+        run: |
+          apk_path="build/artifacts/tieba-lite-arm-v8a.apk"
+          apk_size="$(stat -c%s "$apk_path")"
+          if [ "$apk_size" -gt 104857600 ]; then
+            echo "tmpfile.link anonymous upload limit is 100MB, APK size is $apk_size bytes"
+            exit 1
+          fi
+          response_path="$RUNNER_TEMP/tmpfile-upload-response.json"
+          curl -sS -f -X POST -F "file=@$apk_path" https://tmpfile.link/api/upload -o "$response_path"
+          download_link="$(python3 - "$response_path" <<'PY'
+          import json, sys
+          with open(sys.argv[1]) as f:
+              data = json.load(f)
+          payload = data.get('data') if isinstance(data.get('data'), dict) else data
+          print(payload.get('downloadLinkEncoded') or payload.get('downloadLink') or '')
+          PY
+          )"
+          if [ -z "$download_link" ]; then
+            cat "$response_path"
+            echo "Upload failed or no download link returned"
+            exit 1
+          fi
+          {
+            echo "### Android arm-v8a download"
+            echo ""
+            echo "- File: tieba-lite-arm-v8a.apk"
+            echo "- Expires: anonymous tmpfile.link uploads are deleted after 7 days"
+            echo "- Download: $download_link"
+          } >> "$GITHUB_STEP_SUMMARY"
