@@ -215,13 +215,6 @@ object PermissionUtils {
                     }
                 }
 
-                "android.permission.REQUEST_INSTALL_PACKAGES" -> {
-                    val hint = context.getString(R.string.common_permission_install_unknown_apps)
-                    if (!permissionNames.contains(hint)) {
-                        permissionNames.add(hint)
-                    }
-                }
-
                 "android.permission.SYSTEM_ALERT_WINDOW" -> {
                     val hint = context.getString(R.string.common_permission_display_over_other_apps)
                     if (!permissionNames.contains(hint)) {
