@@ -26,8 +26,6 @@ private fun String.toIPermission(): IPermission {
         PermissionUtils.RECORD_AUDIO, Manifest.permission.RECORD_AUDIO -> PermissionLists.getRecordAudioPermission()
         PermissionUtils.POST_NOTIFICATIONS -> PermissionLists.getPostNotificationsPermission()
         PermissionUtils.READ_MEDIA_IMAGES -> PermissionLists.getReadMediaImagesPermission()
-        PermissionUtils.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION -> PermissionLists.getAccessFineLocationPermission()
-        PermissionUtils.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> PermissionLists.getAccessCoarseLocationPermission()
         else -> throw IllegalArgumentException("Unknown permission: $this")
     }
 }
@@ -42,10 +40,6 @@ object PermissionUtils {
     const val READ_CONTACTS = "android.permission.READ_CONTACTS"
     const val WRITE_CONTACTS = "android.permission.WRITE_CONTACTS"
     const val GET_ACCOUNTS = "android.permission.GET_ACCOUNTS"
-
-    const val ACCESS_FINE_LOCATION = "android.permission.ACCESS_FINE_LOCATION"
-    const val ACCESS_COARSE_LOCATION = "android.permission.ACCESS_COARSE_LOCATION"
-    const val ACCESS_BACKGROUND_LOCATION = "android.permission.ACCESS_BACKGROUND_LOCATION"
 
     const val RECORD_AUDIO = "android.permission.RECORD_AUDIO"
 
@@ -122,20 +116,6 @@ object PermissionUtils {
 
                 Manifest.permission.RECORD_AUDIO -> {
                     val hint = context.getString(R.string.common_permission_microphone)
-                    if (!permissionNames.contains(hint)) {
-                        permissionNames.add(hint)
-                    }
-                }
-
-                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, "android.permission.ACCESS_BACKGROUND_LOCATION" -> {
-                    val hint: String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                        !permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION) &&
-                        !permissions.contains(Manifest.permission.ACCESS_COARSE_LOCATION)
-                    ) {
-                        context.getString(R.string.common_permission_location_background)
-                    } else {
-                        context.getString(R.string.common_permission_location)
-                    }
                     if (!permissionNames.contains(hint)) {
                         permissionNames.add(hint)
                     }
