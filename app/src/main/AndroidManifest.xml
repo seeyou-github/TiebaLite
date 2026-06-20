@@ -15,14 +15,10 @@
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.miui.personalassistant.permission.FAVORITE" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <supports-screens
         android:anyDensity="true"
@@ -51,18 +47,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <service
-            android:name=".services.OKSignService"
-            android:exported="true"
-            android:enabled="true"
-            android:foregroundServiceType="specialUse"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:process=":oksign">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="oksign" />
-        </service>
-
         <activity
             android:name=".activities.AppFontSizeActivity"
             android:configChanges="screenSize|screenLayout|orientation|smallestScreenSize|keyboardHidden"
@@ -294,26 +278,6 @@
                 android:resource="@xml/shortcut_new" />
         </activity-alias>
 
-        <activity
-            android:name=".activities.OKSignActivity"
-            android:excludeFromRecents="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.huanchengfly.tieba.post.action.OKSIGN" />
-            </intent-filter>
-        </activity>
-
-        <service
-            android:name=".services.OKSignTileService"
-            android:exported="true"
-            android:icon="@mipmap/tieba"
-            android:label="@string/title_oksign"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
         <service
             android:name=".services.NotifyJobService"
             android:exported="true"
@@ -334,8 +298,6 @@
             android:configChanges="screenSize|screenLayout|orientation|smallestScreenSize|keyboardHidden"
             android:label="@string/title_activity_edit_profile"
             android:windowSoftInputMode="adjustResize" />
-
-        <receiver android:name=".receivers.AutoSignAlarm" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

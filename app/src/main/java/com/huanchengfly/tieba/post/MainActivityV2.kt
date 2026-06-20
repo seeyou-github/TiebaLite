@@ -104,10 +104,8 @@ import com.huanchengfly.tieba.post.utils.ThemeUtil
 import com.huanchengfly.tieba.post.utils.TiebaUtil
 import com.huanchengfly.tieba.post.utils.compose.LaunchActivityForResult
 import com.huanchengfly.tieba.post.utils.compose.LaunchActivityRequest
-import com.huanchengfly.tieba.post.utils.isIgnoringBatteryOptimizations
 import com.huanchengfly.tieba.post.utils.newIntentFilter
 import com.huanchengfly.tieba.post.utils.registerPickMediasLauncher
-import com.huanchengfly.tieba.post.utils.requestIgnoreBatteryOptimizations
 import com.huanchengfly.tieba.post.utils.requestPermission
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
@@ -294,12 +292,6 @@ class MainActivityV2 : BaseComposeActivity() {
         }
     }
 
-    private fun initAutoSign() {
-        runCatching {
-            TiebaUtil.initAutoSign(this)
-        }
-    }
-
     override fun onStart() {
         super.onStart()
         runCatching {
@@ -340,7 +332,6 @@ class MainActivityV2 : BaseComposeActivity() {
     override fun onCreateContent(systemUiController: SystemUIBarsTweaker) {
         super.onCreateContent(systemUiController)
         fetchAccount()
-        initAutoSign()
     }
 
     private fun openClipBoardLink(link: ClipBoardLink) {
@@ -433,34 +424,8 @@ class MainActivityV2 : BaseComposeActivity() {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
-        val okSignAlertDialogState = rememberDialogState()
         ClipBoardDetectDialog()
-        AlertDialog(
-            dialogState = okSignAlertDialogState,
-            title = { Text(text = stringResource(id = R.string.title_dialog_oksign_battery_optimization)) },
-            content = { Text(text = stringResource(id = R.string.message_dialog_oksign_battery_optimization)) },
-            buttons = {
-                DialogPositiveButton(
-                    text = stringResource(id = R.string.button_go_to_ignore_battery_optimization),
-                    onClick = {
-                        requestIgnoreBatteryOptimizations()
-                    }
-                )
-                DialogNegativeButton(
-                    text = stringResource(id = R.string.button_cancel)
-                )
-                DialogNegativeButton(
-                    text = stringResource(id = R.string.button_dont_remind_again),
-                    onClick = {
-                        appPreferences.ignoreBatteryOptimizationsDialog = true
-                    }
-                )
-            },
-        )
         LaunchedEffect(Unit) {
-            if (appPreferences.autoSign && !isIgnoringBatteryOptimizations() && !appPreferences.ignoreBatteryOptimizationsDialog) {
-                okSignAlertDialogState.show()
-            }
             onGlobalEvent<GlobalEvent.StartSelectImages> {
                 pickMediasLauncher.launch(
                     PickMediasRequest(it.id, it.maxCount, it.mediaType)

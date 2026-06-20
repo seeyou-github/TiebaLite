@@ -500,12 +500,6 @@ fun HomePage(
                 navigationIcon = accountNavIconIfCompact(),
                 actions = {
                     ActionItem(
-                        icon = ImageVector.vectorResource(id = R.drawable.ic_oksign),
-                        contentDescription = stringResource(id = R.string.title_oksign)
-                    ) {
-                        TiebaUtil.startSign(context)
-                    }
-                    ActionItem(
                         icon = Icons.Outlined.ViewAgenda,
                         contentDescription = stringResource(id = R.string.title_switch_list_single)
                     ) {

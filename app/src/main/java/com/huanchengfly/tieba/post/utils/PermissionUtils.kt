@@ -273,13 +273,6 @@ object PermissionUtils {
                     }
                 }
 
-                "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" -> {
-                    val hint = context.getString(R.string.common_permission_ignore_battery_optimize)
-                    if (!permissionNames.contains(hint)) {
-                        permissionNames.add(hint)
-                    }
-                }
-
                 "android.permission.BIND_VPN_SERVICE" -> {
                     val hint = context.getString(R.string.common_permission_vpn)
                     if (!permissionNames.contains(hint)) {

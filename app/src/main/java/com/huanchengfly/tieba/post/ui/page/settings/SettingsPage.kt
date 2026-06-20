@@ -35,7 +35,6 @@ import com.huanchengfly.tieba.post.ui.page.destinations.CustomSettingsPageDestin
 import com.huanchengfly.tieba.post.ui.page.destinations.HabitSettingsPageDestination
 import com.huanchengfly.tieba.post.ui.page.destinations.LoginPageDestination
 import com.huanchengfly.tieba.post.ui.page.destinations.MoreSettingsPageDestination
-import com.huanchengfly.tieba.post.ui.page.destinations.OKSignSettingsPageDestination
 import com.huanchengfly.tieba.post.ui.widgets.compose.Avatar
 import com.huanchengfly.tieba.post.ui.widgets.compose.AvatarIcon
 import com.huanchengfly.tieba.post.ui.widgets.compose.BackNavigationIcon
@@ -184,25 +183,6 @@ fun SettingsPage(
                         },
                         darkenOnDisable = false,
                         onClick = { navigator.navigate(HabitSettingsPageDestination) }
-                    )
-                }
-                prefsItem {
-                    TextPref(
-                        title = stringResource(id = R.string.title_oksign),
-                        summary = stringResource(id = R.string.summary_settings_oksign),
-                        leadingIcon = {
-                            LeadingIcon {
-                                AvatarIcon(
-                                    icon = ImageVector.vectorResource(id = R.drawable.ic_rocket_launch_black_24),
-                                    size = Sizes.Small,
-                                    contentDescription = null,
-                                )
-                            }
-                        },
-                        darkenOnDisable = false,
-                        onClick = {
-                            navigator.navigate(OKSignSettingsPageDestination)
-                        }
                     )
                 }
                 prefsItem {

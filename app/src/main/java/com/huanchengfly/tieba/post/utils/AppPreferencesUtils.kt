@@ -50,21 +50,12 @@ open class AppPreferencesUtils private constructor(ctx: Context) {
 
     var userLikeLastRequestUnix by DataStoreDelegates.long(defaultValue = 0L)
 
-    var ignoreBatteryOptimizationsDialog by DataStoreDelegates.boolean(defaultValue = false)
-
     var appIcon by DataStoreDelegates.string(
         defaultValue = LauncherIcons.DEFAULT_ICON,
         key = AppIconUtil.PREF_KEY_APP_ICON
     )
 
     var useThemedIcon by DataStoreDelegates.boolean(defaultValue = false)
-
-    var autoSign by DataStoreDelegates.boolean(defaultValue = false, key = "auto_sign")
-
-    var autoSignTime by DataStoreDelegates.string(
-        defaultValue = "09:00",
-        key = "auto_sign_time"
-    )
 
     var blockVideo by DataStoreDelegates.boolean(defaultValue = false)
 
@@ -178,8 +169,6 @@ open class AppPreferencesUtils private constructor(ctx: Context) {
     var postOrReplyWarning by DataStoreDelegates.boolean(defaultValue = true)
 
     var radius by DataStoreDelegates.int(defaultValue = 8)
-
-    var signDay by DataStoreDelegates.int(defaultValue = -1, key = "sign_day")
 
     var showBlockTip by DataStoreDelegates.boolean(defaultValue = true)
 
