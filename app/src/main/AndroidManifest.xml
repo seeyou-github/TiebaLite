@@ -9,7 +9,7 @@
     <uses-permission
         android:name="android.permission.READ_PHONE_STATE"
         android:maxSdkVersion="28" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
@@ -80,7 +80,7 @@
             android:theme="@style/AppTheme.PhotoView"
             android:windowSoftInputMode="adjustResize" />
 
-        <receiver
+        <!-- <receiver
             android:name=".receivers.BootCompleteSignReceiver"
             android:enabled="true"
             android:exported="false">
@@ -89,7 +89,7 @@
 
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver>
+        </receiver> -->
 
         <meta-data
             android:name="android.max_aspect"
