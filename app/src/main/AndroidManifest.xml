@@ -50,10 +50,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_descriptor"
-        android:icon="@mipmap/ic_launcher_new"
+        android:icon="@mipmap/tieba"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:roundIcon="@mipmap/ic_launcher_new_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
@@ -122,8 +121,7 @@
             android:configChanges="screenSize|screenLayout|orientation|smallestScreenSize|keyboard|navigation|keyboardHidden"
             android:enabled="true"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_new"
-            android:roundIcon="@mipmap/ic_launcher_new_round"
+            android:icon="@mipmap/tieba"
             android:launchMode="singleTask"
             android:resizeableActivity="true"
             android:theme="@style/Theme.Splash"
@@ -171,8 +169,7 @@
             android:name=".activities.MainActivity"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_new"
-            android:roundIcon="@mipmap/ic_launcher_new_round"
+            android:icon="@mipmap/tieba"
             android:targetActivity=".MainActivityV2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -206,8 +203,7 @@
             android:name=".MainActivityIconThemed"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_new_themed"
-            android:roundIcon="@mipmap/ic_launcher_new_themed_round"
+            android:icon="@mipmap/tieba"
             android:targetActivity=".MainActivityV2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -241,8 +237,7 @@
             android:name=".MainActivityIconInvert"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_new_invert"
-            android:roundIcon="@mipmap/ic_launcher_new_invert_round"
+            android:icon="@mipmap/tieba"
             android:targetActivity=".MainActivityV2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -275,8 +270,7 @@
             android:name=".MainActivityIconOld"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:icon="@mipmap/tieba"
             android:targetActivity=".MainActivityV2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -318,7 +312,7 @@
         <service
             android:name=".services.OKSignTileService"
             android:exported="true"
-            android:icon="@drawable/ic_oksign"
+            android:icon="@mipmap/tieba"
             android:label="@string/title_oksign"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
