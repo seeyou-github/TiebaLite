@@ -117,25 +117,15 @@ fun ExplorePage() {
     val loggedIn = remember(account) { account != null }
 
     val pages = remember {
-        listOfNotNull(
-            if (loggedIn) ExplorePageItem(
-                "concern",
-                { TabText(text = stringResource(id = R.string.title_concern), selected = it) },
-                { ConcernPage() }
-            ) else null,
-            ExplorePageItem(
-                "personalized",
-                { TabText(text = stringResource(id = R.string.title_personalized), selected = it) },
-                { PersonalizedPage() }
-            ),
+        listOf(
             ExplorePageItem(
                 "hot",
                 { TabText(text = stringResource(id = R.string.title_hot), selected = it) },
                 { HotPage() }
-            ),
+            )
         ).toImmutableList()
     }
-    val pagerState = rememberPagerState(initialPage = if (account != null) 1 else 0) { pages.size }
+    val pagerState = rememberPagerState(initialPage = 0) { pages.size }
     val coroutineScope = rememberCoroutineScope()
 
     onGlobalEvent<GlobalEvent.Refresh>(
@@ -148,7 +138,7 @@ fun ExplorePage() {
         backgroundColor = Color.Transparent,
         topBar = {
             Toolbar(
-                title = stringResource(id = R.string.title_explore),
+                title = stringResource(id = R.string.title_hot),
                 navigationIcon = accountNavIconIfCompact(),
                 actions = {
                     ActionItem(
@@ -158,9 +148,7 @@ fun ExplorePage() {
                         navigator.navigate(SearchPageDestination)
                     }
                 },
-            ) {
-                ExplorePageTab(pagerState = pagerState, pages = pages)
-            }
+            )
         },
         modifier = Modifier.fillMaxSize(),
     ) { paddingValues ->

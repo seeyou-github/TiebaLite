@@ -384,11 +384,6 @@ fun UserPage(
                     text = stringResource(id = R.string.my_info_settings),
                     onClick = { navigator.navigate(SettingsPageDestination) },
                 )
-                ListMenuItem(
-                    icon = ImageVector.vectorResource(id = R.drawable.ic_info_black_24),
-                    text = stringResource(id = R.string.my_info_about),
-                    onClick = { navigator.navigate(AboutPageDestination) },
-                )
             }
 
             PullRefreshIndicator(

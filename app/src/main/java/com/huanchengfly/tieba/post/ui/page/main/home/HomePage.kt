@@ -785,55 +785,33 @@ fun EmptyScreen(
     onOpenExplore: () -> Unit
 ) {
     val navigator = LocalNavigator.current
-    TipScreen(
-        title = {
-            if (!loggedIn) {
-                Text(text = stringResource(id = R.string.title_empty_login))
-            } else {
+    if (loggedIn) {
+        TipScreen(
+            title = {
                 Text(text = stringResource(id = R.string.title_empty))
-            }
-        },
-        image = {
-            val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_astronaut))
-            LottieAnimation(
-                composition = composition,
-                iterations = LottieConstants.IterateForever,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(2f)
-            )
-        },
-        message = {
-            if (!loggedIn) {
-                Text(
-                    text = stringResource(id = R.string.home_empty_login),
-                    style = MaterialTheme.typography.body1,
-                    color = ExtendedTheme.colors.textSecondary,
-                    textAlign = TextAlign.Center
+            },
+            image = {
+                val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_astronaut))
+                LottieAnimation(
+                    composition = composition,
+                    iterations = LottieConstants.IterateForever,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(2f)
                 )
-            }
-        },
-        actions = {
-            if (!loggedIn) {
-                Button(
-                    onClick = {
-                        navigator.navigate(LoginPageDestination)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(text = stringResource(id = R.string.button_login))
+            },
+            message = {},
+            actions = {
+                if (canOpenExplore) {
+                    TextButton(
+                        onClick = onOpenExplore,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text(text = stringResource(id = R.string.button_go_to_explore))
+                    }
                 }
-            }
-            if (canOpenExplore) {
-                TextButton(
-                    onClick = onOpenExplore,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(text = stringResource(id = R.string.button_go_to_explore))
-                }
-            }
-        },
-    )
+            },
+        )
+    }
 }

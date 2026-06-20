@@ -134,7 +134,7 @@ fun MainPage(
     )
     val pageCount by remember {
         derivedStateOf {
-            if (hideExplore) 3 else 4
+            if (hideExplore) 2 else 3
         }
     }
     val pagerState = rememberPagerState(
@@ -181,21 +181,6 @@ fun MainPage(
                     title = { stringResource(id = R.string.title_explore) },
                     content = {
                         ExplorePage()
-                    }
-                ),
-                NavigationItem(
-                    id = "notification",
-                    icon = {
-                        AnimatedImageVector.animatedVectorResource(id = R.drawable.ic_animated_rounded_notifications)
-                    },
-                    title = { stringResource(id = R.string.title_notifications) },
-                    badge = messageCount > 0,
-                    badgeText = "$messageCount",
-                    onClick = {
-                        viewModel.send(MainUiIntent.NewMessage.Clear)
-                    },
-                    content = {
-                        NotificationsPage()
                     }
                 ),
                 NavigationItem(
