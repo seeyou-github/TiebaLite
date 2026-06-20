@@ -50,13 +50,6 @@ open class AppPreferencesUtils private constructor(ctx: Context) {
 
     var userLikeLastRequestUnix by DataStoreDelegates.long(defaultValue = 0L)
 
-    var appIcon by DataStoreDelegates.string(
-        defaultValue = LauncherIcons.DEFAULT_ICON,
-        key = AppIconUtil.PREF_KEY_APP_ICON
-    )
-
-    var useThemedIcon by DataStoreDelegates.boolean(defaultValue = false)
-
     var blockVideo by DataStoreDelegates.boolean(defaultValue = false)
 
     var showFollowedOnly by DataStoreDelegates.boolean(defaultValue = false)
