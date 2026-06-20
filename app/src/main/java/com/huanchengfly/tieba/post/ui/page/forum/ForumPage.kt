@@ -131,6 +131,7 @@ import com.huanchengfly.tieba.post.ui.widgets.compose.rememberMenuState
 import com.huanchengfly.tieba.post.ui.widgets.compose.states.StateScreen
 import com.huanchengfly.tieba.post.utils.AccountUtil.LocalAccount
 import com.huanchengfly.tieba.post.utils.HistoryUtil
+import com.huanchengfly.tieba.post.utils.LocalForumManager
 import com.huanchengfly.tieba.post.utils.StringUtil.getShortNumString
 import com.huanchengfly.tieba.post.utils.TiebaUtil
 import com.huanchengfly.tieba.post.utils.appPreferences
@@ -612,6 +613,30 @@ fun ForumPage(
                                 }
                             ) {
                                 Text(text = stringResource(id = R.string.title_share))
+                            }
+                            var isLocalFollowed by remember { mutableStateOf(LocalForumManager.isFollowed(forumName)) }
+                            DropdownMenuItem(
+                                onClick = {
+                                    if (isLocalFollowed) {
+                                        LocalForumManager.unfollow(forumName)
+                                        isLocalFollowed = false
+                                        context.toastShort(context.getString(R.string.toast_local_unfollow_success, forumName))
+                                    } else {
+                                        val avatarUrl = forumInfo?.get { avatar }.orEmpty()
+                                        LocalForumManager.follow(forumName, avatarUrl)
+                                        isLocalFollowed = true
+                                        context.toastShort(context.getString(R.string.toast_local_follow_success, forumName))
+                                    }
+                                    dismiss()
+                                }
+                            ) {
+                                Text(
+                                    text = if (isLocalFollowed) {
+                                        stringResource(id = R.string.menu_local_unfollow)
+                                    } else {
+                                        stringResource(id = R.string.menu_local_follow)
+                                    }
+                                )
                             }
                             DropdownMenuItem(
                                 onClick = {

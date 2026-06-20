@@ -103,7 +103,8 @@ import com.huanchengfly.tieba.post.ui.widgets.compose.rememberMenuState
 import com.huanchengfly.tieba.post.ui.widgets.compose.states.StateScreen
 import com.huanchengfly.tieba.post.utils.AccountUtil.LocalAccount
 import com.huanchengfly.tieba.post.utils.ImageUtil
-import com.huanchengfly.tieba.post.utils.StringUtil.getShortNumString
+import com.huanchengfly.tieba.post.utils.StringUtil
+import com.huanchengfly.tieba.post.utils.LocalForumManager.getShortNumString
 import com.huanchengfly.tieba.post.utils.TiebaUtil
 import com.huanchengfly.tieba.post.utils.appPreferences
 import kotlinx.collections.immutable.persistentListOf
@@ -454,7 +455,7 @@ fun HomePage(
         initial = null
     )
     val isLoggedIn = remember(account) { account != null }
-    val isEmpty by remember { derivedStateOf { forums.isEmpty() } }
+    val isEmpty by remember { derivedStateOf { forums.isEmpty() && (!isLoggedIn || forums.isEmpty()) && LocalForumManager.getFollowedForums().isEmpty() } }
     val hasTopForum by remember { derivedStateOf { topForums.isNotEmpty() } }
     val showHistoryForum by remember { derivedStateOf { context.appPreferences.homePageShowHistoryForum && historyForums.isNotEmpty() } }
     var listSingle by remember { mutableStateOf(context.appPreferences.listSingle) }
@@ -676,7 +677,72 @@ fun HomePage(
                                 )
                             }
                         }
-                        if (showHistoryForum || hasTopForum) {
+                        val localForums = LocalForumManager.getFollowedForums()
+                        if (localForums.isNotEmpty()) {
+                            item(key = "LocalForumHeader", span = { GridItemSpan(maxLineSpan) }) {
+                                Column(
+                                    modifier = Modifier.padding(vertical = 8.dp)
+                                ) {
+                                    Header(
+                                        text = stringResource(id = R.string.title_local_follow_forum),
+                                        invert = true
+                                    )
+                                }
+                            }
+                            items(
+                                items = localForums,
+                                key = { "Local_${it.forumName}" }
+                            ) { localItem ->
+                                val fakeForum = remember(localItem) {
+                                    HomeUiState.Forum(
+                                        forumId = "local_${localItem.forumName}",
+                                        forumName = localItem.forumName,
+                                        avatar = localItem.avatar,
+                                        isLike = 1,
+                                        isSign = false,
+                                        levelId = 1,
+                                        levelName = "本地关注",
+                                        curScore = 0,
+                                        levelupScore = 0,
+                                        slogan = "本地关注",
+                                        hotNum = 0
+                                    )
+                                }
+                                var confirmLocalUnfollowDialog = rememberDialogState()
+                                var isUnfollowDialogOpen by remember { mutableStateOf(false) }
+                                if (isUnfollowDialogOpen) {
+                                    ConfirmDialog(
+                                        dialogState = confirmLocalUnfollowDialog,
+                                        onConfirm = {
+                                            LocalForumManager.unfollow(localItem.forumName)
+                                            isUnfollowDialogOpen = false
+                                        },
+                                        onDismissRequest = {
+                                            isUnfollowDialogOpen = false
+                                        }
+                                    ) {
+                                        Text(text = stringResource(id = R.string.title_dialog_unfollow_forum, localItem.forumName))
+                                    }
+                                    LaunchedEffect(Unit) {
+                                        confirmLocalUnfollowDialog.show()
+                                    }
+                                }
+
+                                ForumItem(
+                                    item = fakeForum,
+                                    showAvatar = listSingle,
+                                    onClick = {
+                                        navigator.navigate(ForumPageDestination(localItem.forumName))
+                                    },
+                                    onUnfollow = {
+                                        isUnfollowDialogOpen = true
+                                    },
+                                    onAddTopForum = {},
+                                    onDeleteTopForum = {}
+                                )
+                            }
+                        }
+                        if (showHistoryForum || hasTopForum || localForums.isNotEmpty()) {
                             item(key = "ForumHeader", span = { GridItemSpan(maxLineSpan) }) {
                                 Column(
                                     modifier = Modifier.padding(vertical = 8.dp)

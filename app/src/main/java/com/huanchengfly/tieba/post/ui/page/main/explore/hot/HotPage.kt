@@ -129,7 +129,7 @@ fun HotPage(
                 item(key = "TopicList") {
                     Container {
                         VerticalGrid(
-                            column = 2,
+                            column = 1,
                             modifier = Modifier.padding(horizontal = 16.dp),
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {

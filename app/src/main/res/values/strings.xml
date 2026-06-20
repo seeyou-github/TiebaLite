@@ -544,6 +544,11 @@
     <string name="desc_show">显示</string>
     <string name="title_settings_status_bar_darker">状态栏遮罩</string>
     <string name="summary_settings_status_bar_darker">开启后非白色主题状态栏将略微变暗</string>
+    <string name="menu_local_follow">本地关注</string>
+    <string name="menu_local_unfollow">取消本地关注</string>
+    <string name="toast_local_follow_success">已本地关注 %1$s 吧</string>
+    <string name="toast_local_unfollow_success">已取消本地关注 %1$s 吧</string>
+    <string name="title_local_follow_forum">本地关注</string>
     <string name="desc_input_color">手动输入颜色</string>
     <string name="release_to_load_latest_posts">松开加载最新回复</string>
     <string name="pull_to_load_latest_posts">继续上拉加载最新回复</string>

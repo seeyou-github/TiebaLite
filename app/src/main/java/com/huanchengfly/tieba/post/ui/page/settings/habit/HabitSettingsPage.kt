@@ -145,7 +145,7 @@ fun HabitSettingsPage(
                         "1" to stringResource(id = R.string.title_sort_by_send),
                     ),
                     useSelectedAsSummary = true,
-                    defaultValue = "0",
+                    defaultValue = "1",
                     leadingIcon = {
                         LeadingIcon {
                             AvatarIcon(
@@ -161,7 +161,7 @@ fun HabitSettingsPage(
                 ListPref(
                     key = "forumFabFunction",
                     title = stringResource(id = R.string.settings_forum_fab_function),
-                    defaultValue = "post",
+                    defaultValue = "hide",
                     leadingIcon = {
                         LeadingIcon {
                             AvatarIcon(

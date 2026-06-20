@@ -96,7 +96,7 @@ fun CustomSettingsPage(
                 ListPref(
                     key = "dark_theme",
                     title = stringResource(id = R.string.settings_night_mode),
-                    defaultValue = ThemeUtil.THEME_AMOLED_DARK,
+                    defaultValue = ThemeUtil.THEME_BLUE_DARK,
                     leadingIcon = {
                         LeadingIcon {
                             AvatarIcon(
@@ -150,7 +150,7 @@ fun CustomSettingsPage(
                 SwitchPref(
                     key = "custom_toolbar_primary_color",
                     title = stringResource(id = R.string.tip_toolbar_primary_color),
-                    defaultChecked = false,
+                    defaultChecked = true,
                     leadingIcon = {
                         LeadingIcon {
                             AvatarIcon(
@@ -167,7 +167,7 @@ fun CustomSettingsPage(
                 SwitchPref(
                     key = "listSingle",
                     title = stringResource(id = R.string.settings_forum_single),
-                    defaultChecked = false,
+                    defaultChecked = true,
                 ) {
                     LeadingIcon {
                         AvatarIcon(
@@ -197,7 +197,7 @@ fun CustomSettingsPage(
                 SwitchPref(
                     key = "liftUpBottomBar",
                     title = stringResource(id = R.string.title_lift_up_bottom_bar),
-                    defaultChecked = true,
+                    defaultChecked = false,
                     leadingIcon = {
                         LeadingIcon {
                             AvatarIcon(

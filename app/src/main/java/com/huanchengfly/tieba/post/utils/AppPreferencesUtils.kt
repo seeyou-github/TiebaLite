@@ -76,16 +76,16 @@ open class AppPreferencesUtils private constructor(ctx: Context) {
     )
 
     var toolbarPrimaryColor by DataStoreDelegates.boolean(
-        defaultValue = false,
+        defaultValue = true,
         key = "custom_toolbar_primary_color"
     )
 
     var defaultSortType by DataStoreDelegates.string(
         key = "default_sort_type",
-        defaultValue = "0"
+        defaultValue = "1"
     )
 
-    var darkTheme by DataStoreDelegates.string(key = "dark_theme", defaultValue = "grey_dark")
+    var darkTheme by DataStoreDelegates.string(key = "dark_theme", defaultValue = "blue_dark")
 
     var doNotUsePhotoPicker by DataStoreDelegates.boolean(defaultValue = false)
 
@@ -96,9 +96,9 @@ open class AppPreferencesUtils private constructor(ctx: Context) {
         key = "follow_system_night"
     )
 
-    var fontScale by DataStoreDelegates.float(defaultValue = 1.0f)
+    var fontScale by DataStoreDelegates.float(defaultValue = 1.15f)
 
-    var forumFabFunction by DataStoreDelegates.string(defaultValue = "post")
+    var forumFabFunction by DataStoreDelegates.string(defaultValue = "hide")
 
     var hideBlockedContent by DataStoreDelegates.boolean(defaultValue = false)
 
@@ -127,11 +127,11 @@ open class AppPreferencesUtils private constructor(ctx: Context) {
 
     var imeHeight by DataStoreDelegates.int(defaultValue = 800)
 
-    var liftUpBottomBar by DataStoreDelegates.boolean(defaultValue = true)
+    var liftUpBottomBar by DataStoreDelegates.boolean(defaultValue = false)
 
     var listItemsBackgroundIntermixed by DataStoreDelegates.boolean(defaultValue = true)
 
-    var listSingle by DataStoreDelegates.boolean(defaultValue = false)
+    var listSingle by DataStoreDelegates.boolean(defaultValue = true)
 
     var littleTail by DataStoreDelegates.string(key = "little_tail")
 
