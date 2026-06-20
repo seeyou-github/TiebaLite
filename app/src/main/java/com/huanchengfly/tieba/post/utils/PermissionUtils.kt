@@ -43,7 +43,6 @@ object PermissionUtils {
 
     const val RECORD_AUDIO = "android.permission.RECORD_AUDIO"
 
-    const val READ_PHONE_STATE = "android.permission.READ_PHONE_STATE"
     const val CALL_PHONE = "android.permission.CALL_PHONE"
     const val USE_SIP = "android.permission.USE_SIP"
     const val READ_PHONE_NUMBERS = "android.permission.READ_PHONE_NUMBERS"
@@ -152,7 +151,7 @@ object PermissionUtils {
                     }
                 }
 
-                Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE, "com.android.voicemail.permission.ADD_VOICEMAIL", Manifest.permission.USE_SIP, "android.permission.READ_PHONE_NUMBERS", "android.permission.ANSWER_PHONE_CALLS" -> {
+                Manifest.permission.CALL_PHONE, "com.android.voicemail.permission.ADD_VOICEMAIL", Manifest.permission.USE_SIP, "android.permission.READ_PHONE_NUMBERS", "android.permission.ANSWER_PHONE_CALLS" -> {
                     val hint = context.getString(R.string.common_permission_phone)
                     if (!permissionNames.contains(hint)) {
                         permissionNames.add(hint)
