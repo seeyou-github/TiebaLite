@@ -104,7 +104,7 @@ fun PrivacySettingsPage(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(
-                                color = ExtendedTheme.colors.cardBackground,
+                                color = ExtendedTheme.colors.card,
                                 shape = RoundedCornerShape(12.dp)
                             )
                             .padding(12.dp)
@@ -191,7 +191,7 @@ fun PrivacySettingsPage(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(
-                                color = ExtendedTheme.colors.cardBackground,
+                                color = ExtendedTheme.colors.card,
                                 shape = RoundedCornerShape(12.dp)
                             )
                             .padding(12.dp)
@@ -468,7 +468,7 @@ fun TemplateItem(
             Text(
                 text = name,
                 style = MaterialTheme.typography.body1,
-                color = if (isSelected) ExtendedTheme.colors.primary else ExtendedTheme.colors.textAndIcon,
+                color = if (isSelected) ExtendedTheme.colors.primary else ExtendedTheme.colors.text,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
             )
         }
@@ -506,7 +506,7 @@ fun PrivacyFieldInput(
                 focusedBorderColor = ExtendedTheme.colors.primary,
                 focusedLabelColor = ExtendedTheme.colors.primary,
                 unfocusedBorderColor = ExtendedTheme.colors.divider,
-                textColor = ExtendedTheme.colors.textAndIcon,
+                textColor = ExtendedTheme.colors.text,
                 cursorColor = ExtendedTheme.colors.primary,
                 backgroundColor = Color.Transparent
             ),
