@@ -78,7 +78,7 @@ import com.huanchengfly.tieba.post.components.ClipBoardForumLink
 import com.huanchengfly.tieba.post.components.ClipBoardLink
 import com.huanchengfly.tieba.post.components.ClipBoardLinkDetector
 import com.huanchengfly.tieba.post.components.ClipBoardThreadLink
-import com.huanchengfly.tieba.post.services.NotifyJobService
+
 import com.huanchengfly.tieba.post.ui.common.theme.compose.ExtendedTheme
 import com.huanchengfly.tieba.post.ui.page.NavGraphs
 import com.huanchengfly.tieba.post.ui.page.destinations.ForumPageDestination
@@ -96,7 +96,7 @@ import com.huanchengfly.tieba.post.ui.widgets.compose.Sizes
 import com.huanchengfly.tieba.post.ui.widgets.compose.rememberDialogState
 import com.huanchengfly.tieba.post.utils.AccountUtil
 import com.huanchengfly.tieba.post.utils.ClientUtils
-import com.huanchengfly.tieba.post.utils.JobServiceUtil
+
 import com.huanchengfly.tieba.post.utils.PermissionUtils
 import com.huanchengfly.tieba.post.utils.PickMediasRequest
 import com.huanchengfly.tieba.post.utils.QuickPreviewUtil
@@ -157,7 +157,7 @@ fun rememberBottomSheetNavigator(
 @AndroidEntryPoint
 class MainActivityV2 : BaseComposeActivity() {
     private val handler = Handler(Looper.getMainLooper())
-    private val newMessageReceiver: BroadcastReceiver = NewMessageReceiver()
+
 
     private val notificationCountFlow: MutableSharedFlow<Int> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
@@ -294,24 +294,6 @@ class MainActivityV2 : BaseComposeActivity() {
 
     override fun onStart() {
         super.onStart()
-        runCatching {
-            ContextCompat.registerReceiver(
-                this,
-                newMessageReceiver,
-                newIntentFilter(NotifyJobService.ACTION_NEW_MESSAGE),
-                ContextCompat.RECEIVER_NOT_EXPORTED
-            )
-            startService(Intent(this, NotifyJobService::class.java))
-            val builder = JobInfo.Builder(
-                JobServiceUtil.getJobId(this),
-                ComponentName(this, NotifyJobService::class.java)
-            )
-                .setPersisted(true)
-                .setPeriodic(30 * 60 * 1000L)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-            val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-            jobScheduler.schedule(builder.build())
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -510,20 +492,7 @@ class MainActivityV2 : BaseComposeActivity() {
         }
     }
 
-    private inner class NewMessageReceiver : BroadcastReceiver() {
-        @SuppressLint("RestrictedApi")
-        override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action == NotifyJobService.ACTION_NEW_MESSAGE) {
-                val channel = intent.getStringExtra("channel")
-                val count = intent.getIntExtra("count", 0)
-                if (channel != null && channel == NotifyJobService.CHANNEL_TOTAL) {
-                    lifecycleScope.launch {
-                        notificationCountFlow.emit(count)
-                    }
-                }
-            }
-        }
-    }
+
 }
 
 private object TiebaNavHostDefaults {
