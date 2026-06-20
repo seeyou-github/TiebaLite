@@ -246,7 +246,8 @@ private fun ThreadList(
                             onClickReply = onItemReplyClicked,
                             onAgree = onAgree,
                             onClickOriginThread = onOriginThreadClicked,
-                            onClickUser = onUserClicked
+                            onClickUser = onUserClicked,
+                            showForum = false
                         )
                     }
                 }

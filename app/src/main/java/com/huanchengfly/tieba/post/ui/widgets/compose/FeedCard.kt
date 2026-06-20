@@ -766,6 +766,7 @@ fun FeedCard(
     onClickForum: (SimpleForum) -> Unit = {},
     onClickOriginThread: (OriginThreadInfo) -> Unit = {},
     dislikeAction: @Composable () -> Unit = {},
+    showForum: Boolean = true,
 ) {
     Card(
         header = {
@@ -808,7 +809,9 @@ fun FeedCard(
                     )
                 }
 
-            ThreadForumInfo(item = item, onClick = onClickForum)
+            if (showForum) {
+                ThreadForumInfo(item = item, onClick = onClickForum)
+            }
         },
         action = {
             Row(modifier = Modifier.fillMaxWidth()) {
@@ -849,6 +852,7 @@ fun FeedCard(
     onClickUser: (id: Long) -> Unit = {},
     onClickForum: (name: String) -> Unit = {},
     onClickOriginThread: (OriginThreadInfo) -> Unit = {},
+    showForum: Boolean = true,
 ) {
     Card(
         header = {
@@ -875,11 +879,13 @@ fun FeedCard(
                 forumName = item.get { threadInfo.forumName },
                 threadId = item.get { threadInfo.threadId },
             )
-            ThreadForumInfo(
-                forumName = item.get { threadInfo.forumName },
-                forumAvatar = item.get { threadInfo.avatar },
-                onClick = { onClickForum(item.get { threadInfo.forumName }) }
-            )
+            if (showForum) {
+                ThreadForumInfo(
+                    forumName = item.get { threadInfo.forumName },
+                    forumAvatar = item.get { threadInfo.avatar },
+                    onClick = { onClickForum(item.get { threadInfo.forumName }) }
+                )
+            }
         },
         action = {
             Row(modifier = Modifier.fillMaxWidth()) {
@@ -918,6 +924,7 @@ fun FeedCard(
     onClickUser: (id: Long) -> Unit = {},
     onClickForum: (name: String) -> Unit = {},
     onClickOriginThread: (OriginThreadInfo) -> Unit = {},
+    showForum: Boolean = true,
 ) {
     Card(
         header = {
@@ -961,11 +968,13 @@ fun FeedCard(
                     )
                 }
 
-            ThreadForumInfo(
-                forumName = item.get { forum_name },
-                forumAvatar = null,
-                onClick = { onClickForum(item.get { forum_name }) }
-            )
+            if (showForum) {
+                ThreadForumInfo(
+                    forumName = item.get { forum_name },
+                    forumAvatar = null,
+                    onClick = { onClickForum(item.get { forum_name }) }
+                )
+            }
         },
         action = {
             Row(modifier = Modifier.fillMaxWidth()) {
