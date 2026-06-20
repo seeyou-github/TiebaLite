@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Brightness2
 import androidx.compose.material.icons.outlined.BrightnessAuto
 import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material.icons.outlined.NoAccounts
 import androidx.compose.material.icons.outlined.FontDownload
 import androidx.compose.material.icons.outlined.FormatColorFill
 import androidx.compose.material.icons.outlined.Upcoming
@@ -177,6 +178,23 @@ fun CustomSettingsPage(
                         )
                     }
                 }
+            }
+            prefsItem {
+                SwitchPref(
+                    key = "do_not_load_avatar",
+                    title = stringResource(id = R.string.title_settings_do_not_load_avatar),
+                    summary = stringResource(id = R.string.summary_settings_do_not_load_avatar),
+                    defaultChecked = false,
+                    leadingIcon = {
+                        LeadingIcon {
+                            AvatarIcon(
+                                icon = Icons.Outlined.NoAccounts,
+                                size = Sizes.Small,
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                )
             }
             prefsItem {
                 SwitchPref(

@@ -129,7 +129,8 @@ private fun UserHeader(
             Avatar(
                 data = user.get { StringUtil.getAvatarUrl(portrait) },
                 size = Sizes.Small,
-                contentDescription = stringResource(id = R.string.user_portrait)
+                contentDescription = stringResource(id = R.string.user_portrait),
+                username = user.get { nameShow }.ifBlank { user.get { name } }
             )
         },
         name = {
@@ -177,7 +178,8 @@ fun UserHeader(
             Avatar(
                 data = StringUtil.getAvatarUrl(portrait),
                 size = Sizes.Small,
-                contentDescription = stringResource(id = R.string.user_portrait)
+                contentDescription = stringResource(id = R.string.user_portrait),
+                username = nameShow.ifBlank { name }
             )
         },
         name = {

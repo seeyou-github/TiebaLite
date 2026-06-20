@@ -103,6 +103,14 @@ fun AvatarPlaceholder(
     )
 }
 
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.Text
+import com.huanchengfly.tieba.post.utils.appPreferences
+import com.huanchengfly.tieba.post.utils.ThemeUtil
+import kotlin.math.abs
+
 @Composable
 fun Avatar(
     data: String?,
@@ -110,13 +118,52 @@ fun Avatar(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape,
+    username: String? = null
 ) {
-    Avatar(
-        data = data,
-        contentDescription = contentDescription,
-        modifier = modifier.size(size),
-        shape = shape,
-    )
+    val context = LocalContext.current
+    if (context.appPreferences.doNotLoadAvatar) {
+        val displayName = username ?: data ?: ""
+        val firstChar = displayName.trim().firstOrNull()?.toString()?.uppercase() ?: "?"
+        val colorsLight = listOf(
+            Color(0xFFE57373), Color(0xFFF06292), Color(0xFFBA68C8), Color(0xFF9575CD),
+            Color(0xFF7986CB), Color(0xFF64B5F6), Color(0xFF4FC3F7), Color(0xFF4DD0E1),
+            Color(0xFF4DB6AC), Color(0xFF81C784), Color(0xFFAED581), Color(0xFFFFD54F),
+            Color(0xFFFFB74D), Color(0xFFFF8A65), Color(0xFFA1887F), Color(0xFF90A4AE)
+        )
+        val colorsDark = listOf(
+            Color(0xFFC62828), Color(0xFFAD1457), Color(0xFF6A1B9A), Color(0xFF4527A0),
+            Color(0xFF283593), Color(0xFF1565C0), Color(0xFF0277BD), Color(0xFF00838F),
+            Color(0xFF00695C), Color(0xFF2E7D32), Color(0xFF558B2F), Color(0xFFF9A825),
+            Color(0xFFEF6C00), Color(0xFFD84315), Color(0xFF4E342E), Color(0xFF37474F)
+        )
+        val hash = abs(displayName.hashCode())
+        val isNight = ThemeUtil.isNightMode(ThemeUtil.themeState.value)
+        val bgColorList = if (isNight) colorsDark else colorsLight
+        val bgColor = bgColorList[hash % bgColorList.size]
+
+        Box(
+            contentAlignment = androidx.compose.ui.Alignment.Center,
+            modifier = modifier
+                .size(size)
+                .clip(shape)
+                .background(bgColor)
+        ) {
+            Text(
+                text = firstChar,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = (size.value * 0.45f).sp,
+                textAlign = TextAlign.Center
+            )
+        }
+    } else {
+        Avatar(
+            data = data,
+            contentDescription = contentDescription,
+            modifier = modifier.size(size),
+            shape = shape,
+        )
+    }
 }
 
 @Composable

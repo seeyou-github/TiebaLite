@@ -87,6 +87,8 @@ open class AppPreferencesUtils private constructor(ctx: Context) {
 
     var darkTheme by DataStoreDelegates.string(key = "dark_theme", defaultValue = "blue_dark")
 
+    var doNotLoadAvatar by DataStoreDelegates.boolean(defaultValue = false, key = "do_not_load_avatar")
+
     var doNotUsePhotoPicker by DataStoreDelegates.boolean(defaultValue = false)
 
     var useDynamicColorTheme by DataStoreDelegates.boolean(defaultValue = false)
