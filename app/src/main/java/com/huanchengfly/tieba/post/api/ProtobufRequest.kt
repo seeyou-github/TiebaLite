@@ -15,7 +15,7 @@ import com.huanchengfly.tieba.post.utils.CacheUtil.base64Encode
 import com.huanchengfly.tieba.post.utils.ClientUtils
 import com.huanchengfly.tieba.post.utils.CuidUtils
 import com.huanchengfly.tieba.post.utils.DeviceUtils
-import com.huanchengfly.tieba.post.utils.MobileInfoUtil
+import com.huanchengfly.tieba.post.utils.AppPrivacyManager
 import com.huanchengfly.tieba.post.utils.UIDUtil
 import com.squareup.wire.Message
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -77,23 +77,23 @@ fun buildCommonRequest(
     ClientVersion.TIEBA_V11 -> {
         CommonRequest(
             BDUSS = bduss ?: AccountUtil.getBduss(),
-            _client_id = ClientUtils.clientId ?: RetrofitTiebaApi.randomClientId,
+            _client_id = AppPrivacyManager.getClientId(),
             _client_type = 2,
             _client_version = clientVersion.version,
-            _os_version = "${Build.VERSION.SDK_INT}",
-            _phone_imei = MobileInfoUtil.getIMEI(context),
+            _os_version = AppPrivacyManager.getOsVersion(),
+            _phone_imei = AppPrivacyManager.getPhoneImei(context),
             _timestamp = System.currentTimeMillis(),
-            brand = Build.BRAND,
-            c3_aid = UIDUtil.getAid(),
-            cuid = CuidUtils.getNewCuid(),
-            cuid_galaxy2 = CuidUtils.getNewCuid(),
+            brand = AppPrivacyManager.getBrand(),
+            c3_aid = AppPrivacyManager.getC3Aid(),
+            cuid = AppPrivacyManager.getCuid(),
+            cuid_galaxy2 = AppPrivacyManager.getCuidGalaxy2(),
             cuid_gid = "",
             from = "1024324o",
             is_teenager = 0,
             lego_lib_version = "3.0.0",
-            model = Build.MODEL,
-            net_type = 1,
-            oaid = OAID().toJson(),
+            model = AppPrivacyManager.getModel(),
+            net_type = AppPrivacyManager.getNetType().toIntOrNull() ?: 1,
+            oaid = AppPrivacyManager.getOaid(),
             pversion = "1.0.3",
             sample_id = ClientUtils.sampleId,
             stoken = stoken ?: AccountUtil.getSToken(),
@@ -103,19 +103,19 @@ fun buildCommonRequest(
     ClientVersion.TIEBA_V12 -> {
         CommonRequest(
             BDUSS = AccountUtil.getBduss(),
-            _client_id = ClientUtils.clientId ?: RetrofitTiebaApi.randomClientId,
+            _client_id = AppPrivacyManager.getClientId(),
             _client_type = 2,
             _client_version = clientVersion.version,
-            _os_version = "${Build.VERSION.SDK_INT}",
-            _phone_imei = MobileInfoUtil.getIMEI(context),
+            _os_version = AppPrivacyManager.getOsVersion(),
+            _phone_imei = AppPrivacyManager.getPhoneImei(context),
             _timestamp = System.currentTimeMillis(),
             active_timestamp = ClientUtils.activeTimestamp,
-            android_id = base64Encode(UIDUtil.getAndroidId("000")),
-            brand = Build.BRAND,
-            c3_aid = UIDUtil.getAid(),
+            android_id = base64Encode(AppPrivacyManager.getAndroidId("000")),
+            brand = AppPrivacyManager.getBrand(),
+            c3_aid = AppPrivacyManager.getC3Aid(),
             cmode = 1,
-            cuid = CuidUtils.getNewCuid(),
-            cuid_galaxy2 = CuidUtils.getNewCuid(),
+            cuid = AppPrivacyManager.getCuid(),
+            cuid_galaxy2 = AppPrivacyManager.getCuidGalaxy2(),
             cuid_gid = "",
             event_day = SimpleDateFormat("yyyyMdd", Locale.getDefault()).format(
                 Date(
@@ -123,73 +123,72 @@ fun buildCommonRequest(
                 )
             ),
             extra = "",
-            first_install_time = App.Config.appFirstInstallTime,
+            first_install_time = AppPrivacyManager.getFirstInstallTime(),
             framework_ver = "3340042",
             from = "1020031h",
             is_teenager = 0,
-            last_update_time = App.Config.appLastUpdateTime,
+            last_update_time = AppPrivacyManager.getLastUpdateTime(),
             lego_lib_version = "3.0.0",
-            model = Build.MODEL,
-            net_type = 1,
+            model = AppPrivacyManager.getModel(),
+            net_type = AppPrivacyManager.getNetType().toIntOrNull() ?: 1,
             oaid = "",
             personalized_rec_switch = 1,
             pversion = "1.0.3",
-            q_type = 0,
             sample_id = ClientUtils.sampleId,
-            scr_dip = App.ScreenInfo.DENSITY.toDouble(),
-            scr_h = getScreenHeight(),
-            scr_w = getScreenWidth(),
+            scr_dip = AppPrivacyManager.getScrDip(),
+            scr_h = AppPrivacyManager.getScrH(),
+            scr_w = AppPrivacyManager.getScrW(),
             sdk_ver = "2.34.0",
             start_scheme = "",
             start_type = 1,
             stoken = AccountUtil.getSToken(),
             swan_game_ver = "1038000",
             user_agent = getUserAgent("tieba/${clientVersion.version}"),
-            z_id = AccountUtil.getAccountInfo { zid }
+            z_id = AppPrivacyManager.getZId()
         )
     }
 
     ClientVersion.TIEBA_V12_POST -> {
         CommonRequest(
             BDUSS = AccountUtil.getBduss(),
-            _client_id = ClientUtils.clientId ?: RetrofitTiebaApi.randomClientId,
+            _client_id = AppPrivacyManager.getClientId(),
             _client_type = 2,
             _client_version = clientVersion.version,
-            _os_version = "${Build.VERSION.SDK_INT}", // TODO
-            _phone_imei = MobileInfoUtil.getIMEI(context),
+            _os_version = AppPrivacyManager.getOsVersion(),
+            _phone_imei = AppPrivacyManager.getPhoneImei(context),
             _timestamp = System.currentTimeMillis(),
             active_timestamp = ClientUtils.activeTimestamp,
-            android_id = UIDUtil.getAndroidId("000"),
+            android_id = AppPrivacyManager.getAndroidId("000"),
             applist = "",
-            brand = Build.BRAND,
-            c3_aid = UIDUtil.getAid(),
+            brand = AppPrivacyManager.getBrand(),
+            c3_aid = AppPrivacyManager.getC3Aid(),
             cmode = 1,
-            cuid = CuidUtils.getNewCuid(),
-            cuid_galaxy2 = CuidUtils.getNewCuid(),
+            cuid = AppPrivacyManager.getCuid(),
+            cuid_galaxy2 = AppPrivacyManager.getCuidGalaxy2(),
             cuid_gid = "",
-            device_score = "${DeviceUtils.getDeviceScore()}",
+            device_score = AppPrivacyManager.getDeviceScore().toString(),
             event_day = SimpleDateFormat("yyyyMdd", Locale.getDefault()).format(
                 Date(
                     System.currentTimeMillis()
                 )
             ),
             extra = "",
-            first_install_time = App.Config.appFirstInstallTime,
+            first_install_time = AppPrivacyManager.getFirstInstallTime(),
             framework_ver = "3340042",
             from = "1020031h",
             is_teenager = 0,
-            last_update_time = App.Config.appLastUpdateTime,
+            last_update_time = AppPrivacyManager.getLastUpdateTime(),
             lego_lib_version = "3.0.0",
-            model = Build.MODEL,
-            net_type = 1,
-            oaid = App.Config.encodedOAID,
+            model = AppPrivacyManager.getModel(),
+            net_type = AppPrivacyManager.getNetType().toIntOrNull() ?: 1,
+            oaid = AppPrivacyManager.getOaid(),
             personalized_rec_switch = 1,
             pversion = "1.0.3",
             q_type = 0,
             sample_id = ClientUtils.sampleId,
-            scr_dip = App.ScreenInfo.DENSITY.toDouble(),
-            scr_h = getScreenHeight(),
-            scr_w = getScreenWidth(),
+            scr_dip = AppPrivacyManager.getScrDip(),
+            scr_h = AppPrivacyManager.getScrH(),
+            scr_w = AppPrivacyManager.getScrW(),
             sdk_ver = "2.34.0",
             start_scheme = "",
             start_type = 1,
@@ -197,7 +196,7 @@ fun buildCommonRequest(
             swan_game_ver = "1038000",
             tbs = tbs,
             user_agent = getUserAgent("tieba/${clientVersion.version}"),
-            z_id = AccountUtil.getAccountInfo { zid }
+            z_id = AppPrivacyManager.getZId()
         )
     }
 }

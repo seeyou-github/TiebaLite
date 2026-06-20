@@ -547,5 +547,26 @@
     <string name="desc_input_color">手动输入颜色</string>
     <string name="release_to_load_latest_posts">松开加载最新回复</string>
     <string name="pull_to_load_latest_posts">继续上拉加载最新回复</string>
+    <string name="title_settings_privacy">隐私自定义</string>
+    <string name="summary_settings_privacy">自定义每个请求发送的设备指纹、IMEI、型号等隐私信息</string>
+    <string name="btn_save_as_template">另存为模板</string>
+    <string name="privacy_section_templates">隐私模板选择</string>
+    <string name="template_default_masked">内置全屏蔽脱敏模板（推荐）</string>
+    <string name="template_real_device">内置真实设备参数模板</string>
+    <string name="template_secure_sandbox">内置沙盒高安全防追踪模板</string>
+    <string name="template_applied_default">已应用内置脱敏模板</string>
+    <string name="template_applied_real">已应用内置真实设备参数</string>
+    <string name="template_applied_secure">已应用高安全防追踪沙盒参数</string>
+    <string name="template_applied_custom">已应用自定义隐私模板: %1$s</string>
+    <string name="template_deleted">已成功删除自定义模板: %1$s</string>
+    <string name="privacy_section_fields">自定义详细请求字段</string>
+    <string name="btn_save_privacy_settings">应用当前隐私配置</string>
+    <string name="title_save_as_template">另存为自定义隐私模板</string>
+    <string name="label_template_name">模板名称</string>
+    <string name="error_invalid_template_name">该名称为保留系统模板名称，请使用其他名称</string>
+    <string name="template_saved_and_applied">已保存并应用隐私模板：%1$s</string>
+    <string name="template_saved_success">已将当前隐私配置保存至自定义模板：%1$s</string>
+    <string name="error_blank_template_name">模板名称不能为空</string>
+    <string name="btn_delete_template">删除模板</string>
     <string name="settings_home_page_show_history_forum">首页显示最近逛的吧</string>
 </resources>
