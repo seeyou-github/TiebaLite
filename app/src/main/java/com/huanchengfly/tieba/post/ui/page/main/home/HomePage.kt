@@ -737,7 +737,7 @@ fun HomePage(
                                 )
                             }
                         }
-                        if (showHistoryForum || hasTopForum || localForums.isNotEmpty()) {
+                        if (isLoggedIn && (showHistoryForum || hasTopForum || localForums.isNotEmpty())) {
                             item(key = "ForumHeader", span = { GridItemSpan(maxLineSpan) }) {
                                 Column(
                                     modifier = Modifier.padding(vertical = 8.dp)
