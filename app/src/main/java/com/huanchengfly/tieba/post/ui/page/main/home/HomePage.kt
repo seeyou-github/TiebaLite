@@ -104,7 +104,7 @@ import com.huanchengfly.tieba.post.ui.widgets.compose.states.StateScreen
 import com.huanchengfly.tieba.post.utils.AccountUtil.LocalAccount
 import com.huanchengfly.tieba.post.utils.ImageUtil
 import com.huanchengfly.tieba.post.utils.StringUtil
-import com.huanchengfly.tieba.post.utils.LocalForumManager.getShortNumString
+import com.huanchengfly.tieba.post.utils.StringUtil.getShortNumString
 import com.huanchengfly.tieba.post.utils.TiebaUtil
 import com.huanchengfly.tieba.post.utils.appPreferences
 import kotlinx.collections.immutable.persistentListOf
@@ -698,33 +698,28 @@ fun HomePage(
                                         forumId = "local_${localItem.forumName}",
                                         forumName = localItem.forumName,
                                         avatar = localItem.avatar,
-                                        isLike = 1,
                                         isSign = false,
-                                        levelId = 1,
-                                        levelName = "本地关注",
-                                        curScore = 0,
-                                        levelupScore = 0,
-                                        slogan = "本地关注",
+                                        levelId = "1",
                                         hotNum = 0
                                     )
                                 }
-                                var confirmLocalUnfollowDialog = rememberDialogState()
                                 var isUnfollowDialogOpen by remember { mutableStateOf(false) }
+                                val localUnfollowDialogState = rememberDialogState()
                                 if (isUnfollowDialogOpen) {
                                     ConfirmDialog(
-                                        dialogState = confirmLocalUnfollowDialog,
+                                        dialogState = localUnfollowDialogState,
                                         onConfirm = {
                                             LocalForumManager.unfollow(localItem.forumName)
                                             isUnfollowDialogOpen = false
                                         },
-                                        onDismissRequest = {
+                                        onDismiss = {
                                             isUnfollowDialogOpen = false
                                         }
                                     ) {
                                         Text(text = stringResource(id = R.string.title_dialog_unfollow_forum, localItem.forumName))
                                     }
                                     LaunchedEffect(Unit) {
-                                        confirmLocalUnfollowDialog.show()
+                                        localUnfollowDialogState.show()
                                     }
                                 }
 
