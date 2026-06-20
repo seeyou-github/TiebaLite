@@ -1304,33 +1304,6 @@ fun ThreadPage(
                                     forumName
                                 )
                             )
-                        }
-                    )
-                },
-                bottomBar = {
-                    BottomBar(
-                        user = user,
-                        onClickReply = {
-                            navigator.navigate(
-                                ReplyPageDestination(
-                                    forumId = curForumId ?: 0,
-                                    forumName = forum?.get { name }.orEmpty(),
-                                    threadId = threadId,
-                                )
-                            )
-                        },
-                        onAgree = {
-                            val firstPostId =
-                                thread?.get { firstPostId }.takeIf { it != 0L }
-                                    ?: firstPost?.get { id }
-                                    ?: 0L
-                            if (firstPostId != 0L) viewModel.send(
-                                ThreadUiIntent.AgreeThread(
-                                    threadId,
-                                    firstPostId,
-                                    !hasThreadAgreed
-                                )
-                            )
                         },
                         onClickMore = {
                             if (bottomSheetState.isVisible) {
@@ -1338,17 +1311,10 @@ fun ThreadPage(
                             } else {
                                 openBottomSheet()
                             }
-                        },
-                        hasAgreed = hasThreadAgreed,
-                        agreeNum = threadAgreeNum,
-                        modifier = Modifier
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = {}
-                            )
+                        }
                     )
                 },
+                bottomBar = {},
             ) { paddingValues ->
                 ModalBottomSheetLayout(
                     sheetState = bottomSheetState,
@@ -1865,6 +1831,7 @@ private fun TopBar(
     forum: ImmutableHolder<SimpleForum>?,
     onBack: () -> Unit,
     onForumClick: () -> Unit,
+    onClickMore: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TitleCentredToolbar(
@@ -1903,6 +1870,15 @@ private fun TopBar(
         },
         navigationIcon = {
             BackNavigationIcon(onBack)
+        },
+        actions = {
+            IconButton(onClick = onClickMore) {
+                Icon(
+                    imageVector = Icons.Rounded.MoreVert,
+                    contentDescription = stringResource(id = R.string.btn_more),
+                    tint = ExtendedTheme.colors.textSecondary
+                )
+            }
         },
         modifier = modifier
     )
