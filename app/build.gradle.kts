@@ -6,14 +6,6 @@ val appProperties = Properties().apply {
     file("${rootProject.projectDir}/application.properties").inputStream().use { load(it) }
 }
 
-// 读取 keystore.properties（如果存在）
-val keystorePropertiesFile = file("${rootProject.projectDir}/keystore.properties")
-val keystoreProperties = Properties().apply {
-    if (keystorePropertiesFile.exists()) {
-        keystorePropertiesFile.inputStream().use { load(it) }
-    }
-}
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -75,18 +67,15 @@ android {
         viewBinding = true
     }
     signingConfigs {
-        val keystoreFile = keystoreProperties.getProperty("keystore.file", "")
-        if (keystoreFile.isNotBlank()) {
-            create("config") {
-                storeFile = file(File(rootDir, keystoreFile))
-                storePassword = keystoreProperties.getProperty("keystore.password")
-                keyAlias = keystoreProperties.getProperty("keystore.key.alias")
-                keyPassword = keystoreProperties.getProperty("keystore.key.password")
-                enableV1Signing = true
-                enableV2Signing = true
-                enableV3Signing = true
-                enableV4Signing = true
-            }
+        create("config") {
+            storeFile = file(File(rootDir, "app/Test.jks"))
+            storePassword = "123456"
+            keyAlias = "Test"
+            keyPassword = "123456"
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
+            enableV4Signing = true
         }
     }
     buildTypes {
@@ -96,6 +85,7 @@ android {
             isDebuggable = true
             isJniDebuggable = true
             multiDexEnabled = true
+            signingConfig = signingConfigs.getByName("config")
         }
         release {
             isMinifyEnabled = true
@@ -107,12 +97,7 @@ android {
             isDebuggable = false
             isJniDebuggable = false
             multiDexEnabled = true
-        }
-        all {
-            signingConfig =
-                if (signingConfigs.any { it.name == "config" })
-                    signingConfigs.getByName("config")
-                else signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("config")
         }
     }
     compileOptions {
