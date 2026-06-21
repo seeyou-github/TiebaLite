@@ -26,25 +26,47 @@ object SettingsBackup {
     )
 
     suspend fun export(context: Context): String {
+        Test21Log.d(context, "export: start")
         val prefsSnapshot = context.dataStore.data.first()
         val prefs = prefsSnapshot.asJsonCompatMap()
-        val blocks = withContext(Dispatchers.IO) { DatabaseUtil.getAllBlocks() }
+        val blocks = withContext(Dispatchers.IO) {
+            Test21Log.d(context, "export: loading blocks from DB")
+            DatabaseUtil.getAllBlocks()
+        }
         val localForums = LocalForumManager.getFollowedForums()
 
-        return gson.toJson(
+        Test21Log.d(
+            context,
+            "export: prefsKeys=${prefs.size} blocks=${blocks.size} localForums=${localForums.size}"
+        )
+
+        val out = gson.toJson(
             Backup(
                 prefs = prefs,
                 blocks = blocks,
                 localFollowedForums = localForums,
             )
         )
+
+        Test21Log.d(context, "export: jsonBytes=${out.toByteArray(Charsets.UTF_8).size}")
+        Test21Log.d(context, "export: done")
+        return out
     }
 
     suspend fun importAndOverwrite(context: Context, json: String) {
+        Test21Log.d(context, "import: start jsonBytes=${json.toByteArray(Charsets.UTF_8).size}")
         val type = object : TypeToken<Backup>() {}.type
-        val backup = gson.fromJson<Backup>(json, type) ?: return
+        val backup = runCatching { gson.fromJson<Backup>(json, type) }
+            .onFailure { Test21Log.e(context, "import: parse failed", it) }
+            .getOrNull() ?: throw IllegalArgumentException("invalid json")
+
+        Test21Log.d(
+            context,
+            "import: parsed prefsKeys=${backup.prefs.size} blocks=${backup.blocks.size} localForums=${backup.localFollowedForums.size}"
+        )
 
         // 1) Preferences (DataStore)
+        Test21Log.d(context, "import: writing prefs")
         context.dataStore.edit { mutablePrefs ->
             mutablePrefs.clear()
             backup.prefs.forEach { (key, value) ->
@@ -71,19 +93,36 @@ object SettingsBackup {
                 }
             }
         }
+        Test21Log.d(context, "import: prefs written")
 
         // 2) Block list (Room)
+        Test21Log.d(context, "import: writing blocks")
         withContext(Dispatchers.IO) {
-            DatabaseUtil.deleteAllBlocks()
-            backup.blocks.forEach { block ->
-                // Re-generate ids on import to avoid any PK/sequence edge cases.
-                DatabaseUtil.insertBlock(block.copy(id = 0L))
+            try {
+                DatabaseUtil.deleteAllBlocks()
+                backup.blocks.forEachIndexed { index, block ->
+                    DatabaseUtil.insertBlock(block.copy(id = 0L))
+                    if (index % 50 == 0) {
+                        Test21Log.d(context, "import: inserted blocks index=$index")
+                    }
+                }
+                BlockManager.init()
+            } catch (t: Throwable) {
+                Test21Log.e(context, "import: blocks write failed", t)
+                throw t
             }
-            BlockManager.init()
         }
+        Test21Log.d(context, "import: blocks written")
 
         // 3) Local followed forums (SharedPreferences)
-        LocalForumManager.overwriteFollowedForums(backup.localFollowedForums)
+        Test21Log.d(context, "import: writing local forums")
+        runCatching {
+            LocalForumManager.overwriteFollowedForums(backup.localFollowedForums)
+        }.onFailure {
+            Test21Log.e(context, "import: local forums write failed", it)
+            throw it
+        }
+        Test21Log.d(context, "import: done")
     }
 
     private fun Preferences.asJsonCompatMap(): Map<String, Any?> {

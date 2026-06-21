@@ -213,6 +213,9 @@ open class AppPreferencesUtils private constructor(ctx: Context) {
 
     var useWebView by DataStoreDelegates.boolean(defaultValue = true, key = "use_webview")
 
+    // Debug logging for import/export and related flows.
+    var test21LogEnabled by DataStoreDelegates.boolean(defaultValue = false, key = "test21_log_enabled")
+
     private object DataStoreDelegates {
         fun int(
             defaultValue: Int = 0,

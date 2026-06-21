@@ -152,22 +152,23 @@ fun SettingsPage(
             }
         }
 
-        val importLauncher = rememberLauncherForActivityResult(
-            ActivityResultContracts.OpenDocument()
-        ) { uri ->
-            if (uri == null) return@rememberLauncherForActivityResult
-            coroutineScope.launch {
-                runCatching {
-                    val json = context.contentResolver.openInputStream(uri)?.use { it.readBytes().toString(Charsets.UTF_8) }
-                        ?: error("empty file")
-                    SettingsBackup.importAndOverwrite(context, json)
-                }.onSuccess {
-                    snackbarHostState.showSnackbar(context.getString(R.string.toast_import_success))
-                }.onFailure {
-                    snackbarHostState.showSnackbar(context.getString(R.string.toast_import_failed))
+                val importLauncher = rememberLauncherForActivityResult(
+                    ActivityResultContracts.OpenDocument()
+                ) { uri ->
+                    if (uri == null) return@rememberLauncherForActivityResult
+                    coroutineScope.launch {
+                        runCatching {
+                            val json = context.contentResolver.openInputStream(uri)?.use { it.readBytes().toString(Charsets.UTF_8) }
+                                ?: error("empty file")
+                            SettingsBackup.importAndOverwrite(context, json)
+                        }.onSuccess {
+                            snackbarHostState.showSnackbar(context.getString(R.string.toast_import_success))
+                        }.onFailure {
+                            com.huanchengfly.tieba.post.utils.Test21Log.e(context, "settings import failed", it)
+                            snackbarHostState.showSnackbar(context.getString(R.string.toast_import_failed))
+                        }
+                    }
                 }
-            }
-        }
 
         MyScaffold(
             scaffoldState = scaffoldState,
@@ -285,6 +286,7 @@ fun SettingsPage(
                                     pendingExportJson = json
                                     exportLauncher.launch("tieba-lite-settings.json")
                                 }.onFailure {
+                                    com.huanchengfly.tieba.post.utils.Test21Log.e(context, "settings export failed", it)
                                     snackbarHostState.showSnackbar(context.getString(R.string.toast_export_failed))
                                 }
                             }
