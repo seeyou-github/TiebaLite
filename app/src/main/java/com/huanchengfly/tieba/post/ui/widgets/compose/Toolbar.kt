@@ -111,6 +111,7 @@ fun AccountNavIcon(
                                 data = StringUtil.getAvatarUrl(it.portrait),
                                 contentDescription = stringResource(id = R.string.title_switch_account_long_press),
                                 size = Sizes.Small,
+                                username = it.nameShow ?: it.name,
                             )
                             if (currentAccount.id == it.id) {
                                 Icon(
@@ -157,7 +158,8 @@ fun AccountNavIcon(
             Avatar(
                 data = StringUtil.getAvatarUrl(currentAccount.portrait),
                 size = size,
-                contentDescription = stringResource(id = R.string.title_switch_account_long_press)
+                contentDescription = stringResource(id = R.string.title_switch_account_long_press),
+                username = currentAccount.nameShow ?: currentAccount.name
             )
         }
     }

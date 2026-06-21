@@ -923,7 +923,8 @@ private fun ToolbarUserTitle(
             Avatar(
                 data = StringUtil.getAvatarUrl(user.get { portrait }),
                 size = Sizes.Small,
-                contentDescription = null
+                contentDescription = null,
+                username = user.get { nameShow }.ifBlank { user.get { name } }
             )
         },
         name = {

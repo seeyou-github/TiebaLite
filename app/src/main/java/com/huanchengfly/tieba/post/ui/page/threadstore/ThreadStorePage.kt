@@ -257,7 +257,8 @@ private fun StoreItem(
                     Avatar(
                         data = StringUtil.getAvatarUrl(info.author.userPortrait),
                         size = Sizes.Small,
-                        contentDescription = null
+                        contentDescription = null,
+                        username = info.author.nameShow?.ifBlank { info.author.name ?: "" } ?: (info.author.name ?: "")
                     )
                 },
                 name = {

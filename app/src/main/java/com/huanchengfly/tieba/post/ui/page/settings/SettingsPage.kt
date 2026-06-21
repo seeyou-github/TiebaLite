@@ -74,7 +74,8 @@ fun NowAccountItem(
                     Avatar(
                         data = StringUtil.getAvatarUrl(account.portrait),
                         size = Sizes.Small,
-                        contentDescription = null
+                        contentDescription = null,
+                        username = account.nameShow ?: account.name
                     )
                 }
             },

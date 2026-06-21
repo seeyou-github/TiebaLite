@@ -191,7 +191,8 @@ private fun UserLikeForumItem(
         Avatar(
             data = item.avatar,
             size = Sizes.Medium,
-            contentDescription = null
+            contentDescription = null,
+            isUserAvatar = false
         )
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp)

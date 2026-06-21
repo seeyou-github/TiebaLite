@@ -198,7 +198,8 @@ fun SearchThreadUserHeader(
             Avatar(
                 data = StringUtil.getAvatarUrl(user.portrait),
                 size = Sizes.Small,
-                contentDescription = null
+                contentDescription = null,
+                username = user.showNickname?.takeUnless { it.isNullOrBlank() } ?: user.userName
             )
         },
         name = {

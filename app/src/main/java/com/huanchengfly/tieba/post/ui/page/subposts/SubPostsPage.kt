@@ -355,6 +355,7 @@ internal fun SubPostsContent(
                                 data = StringUtil.getAvatarUrl(account.portrait),
                                 size = Sizes.Tiny,
                                 contentDescription = account.name,
+                                username = account.nameShow ?: account.name,
                             )
                             Row(
                                 modifier = Modifier
@@ -663,7 +664,8 @@ private fun SubPostItem(
                                 Avatar(
                                     data = StringUtil.getAvatarUrl(author.get { portrait }),
                                     size = Sizes.Small,
-                                    contentDescription = null
+                                    contentDescription = null,
+                                    username = author.get { nameShow }.ifBlank { author.get { name } }
                                 )
                             },
                             name = {

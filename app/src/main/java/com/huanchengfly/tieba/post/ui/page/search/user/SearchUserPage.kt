@@ -212,7 +212,8 @@ private fun SearchUserItem(
         Avatar(
             data = StringUtil.getAvatarUrl(item.portrait),
             size = Sizes.Medium,
-            contentDescription = item.name
+            contentDescription = item.name,
+            username = item.showNickname?.takeUnless { it.isNullOrBlank() } ?: item.name
         )
         Column(
             modifier = Modifier

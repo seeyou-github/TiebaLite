@@ -213,7 +213,8 @@ private fun SearchForumItem(
         Avatar(
             data = item.avatar,
             size = Sizes.Medium,
-            contentDescription = item.forumNameShow
+            contentDescription = item.forumNameShow,
+            isUserAvatar = false
         )
         Column(
             modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),

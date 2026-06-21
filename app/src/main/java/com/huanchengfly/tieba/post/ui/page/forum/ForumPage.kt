@@ -231,7 +231,8 @@ private fun ForumHeader(
             Avatar(
                 data = forum.avatar,
                 size = Sizes.Large,
-                contentDescription = null
+                contentDescription = null,
+                isUserAvatar = false
             )
             Column(
                 modifier = Modifier.weight(1f),

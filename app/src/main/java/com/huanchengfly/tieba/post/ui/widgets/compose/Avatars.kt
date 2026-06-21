@@ -118,10 +118,12 @@ fun Avatar(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape,
-    username: String? = null
+    username: String? = null,
+    // Only user avatars should be affected by the "do not load avatar" preference.
+    isUserAvatar: Boolean = true,
 ) {
     val context = LocalContext.current
-    if (context.appPreferences.doNotLoadAvatar) {
+    if (isUserAvatar && context.appPreferences.doNotLoadAvatar) {
         val displayName = username ?: data ?: ""
         val firstChar = displayName.trim().firstOrNull()?.toString()?.uppercase() ?: "?"
         val colorsLight = listOf(

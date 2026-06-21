@@ -151,7 +151,8 @@ fun NotificationsListPage(
                                             Avatar(
                                                 data = StringUtil.getAvatarUrl(info.replyer.portrait),
                                                 size = Sizes.Small,
-                                                contentDescription = null
+                                                contentDescription = null,
+                                                username = info.replyer.nameShow ?: info.replyer.name
                                             )
                                         },
                                         name = {

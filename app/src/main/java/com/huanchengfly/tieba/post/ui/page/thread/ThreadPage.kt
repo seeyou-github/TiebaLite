@@ -1851,10 +1851,13 @@ private fun TopBar(
                     ) {
                         Avatar(
                             data = forum.get { avatar },
+                            size = Sizes.Tiny,
                             contentDescription = it.get { name },
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .aspectRatio(1f)
+                            ,
+                            isUserAvatar = false
                         )
 
                         Text(
@@ -1913,6 +1916,8 @@ private fun BottomBar(
                     contentDescription = user.get { name },
                     modifier = Modifier
                         .padding(vertical = 8.dp)
+                    ,
+                    username = user.get { nameShow }.ifBlank { user.get { name } }
                 )
 
                 Row(
@@ -2101,7 +2106,8 @@ fun PostCard(
                                 Avatar(
                                     data = StringUtil.getAvatarUrl(author.portrait),
                                     size = Sizes.Small,
-                                    contentDescription = stringResource(id = R.string.user_portrait)
+                                    contentDescription = stringResource(id = R.string.user_portrait),
+                                    username = author.nameShow.ifBlank { author.name }
                                 )
                             },
                             name = {

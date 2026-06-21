@@ -308,7 +308,8 @@ private fun ForumItemContent(
                 Avatar(
                     data = item.avatar,
                     size = 40.dp,
-                    contentDescription = stringResource(R.string.forum_portrait)
+                    contentDescription = stringResource(R.string.forum_portrait),
+                    isUserAvatar = false
                 )
                 Spacer(modifier = Modifier.width(14.dp))
             }

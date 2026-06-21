@@ -116,7 +116,8 @@ fun ForumRuleDetailPage(
                                 Avatar(
                                     data = StringUtil.getAvatarUrl(it.get { portrait }),
                                     size = Sizes.Small,
-                                    contentDescription = null
+                                    contentDescription = null,
+                                    username = it.get { name_show }.ifBlank { it.get { user_name } }
                                 )
                             },
                             name = {
