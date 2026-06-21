@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
@@ -42,7 +41,7 @@ import com.huanchengfly.tieba.post.ui.page.destinations.PrivacySettingsPageDesti
 import com.huanchengfly.tieba.post.ui.widgets.compose.Avatar
 import com.huanchengfly.tieba.post.ui.widgets.compose.AvatarIcon
 import com.huanchengfly.tieba.post.ui.widgets.compose.BackNavigationIcon
-import com.huanchengfly.tieba.post.ui.widgets.compose.LocalSnackbarHostState
+import com.huanchengfly.tieba.post.ui.widgets.compose.MyScaffold
 import com.huanchengfly.tieba.post.ui.widgets.compose.Sizes
 import com.huanchengfly.tieba.post.ui.widgets.compose.TitleCentredToolbar
 import com.huanchengfly.tieba.post.utils.AccountUtil.LocalAccount
@@ -126,7 +125,9 @@ fun SettingsPage(
     ProvideNavigator(navigator = navigator) {
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
-        val snackbarHostState = LocalSnackbarHostState.current
+        // Provide snackbar host for import/export feedback.
+        val scaffoldState = androidx.compose.material.rememberScaffoldState()
+        val snackbarHostState = scaffoldState.snackbarHostState
 
         var pendingExportJson by remember { mutableStateOf<String?>(null) }
         val exportLauncher = rememberLauncherForActivityResult(
@@ -168,7 +169,8 @@ fun SettingsPage(
             }
         }
 
-        Scaffold(
+        MyScaffold(
+            scaffoldState = scaffoldState,
             backgroundColor = Color.Transparent,
             topBar = {
                 TitleCentredToolbar(
