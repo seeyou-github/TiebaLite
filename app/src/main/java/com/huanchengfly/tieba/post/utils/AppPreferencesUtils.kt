@@ -103,7 +103,8 @@ open class AppPreferencesUtils private constructor(ctx: Context) {
 
     var forumFabFunction by DataStoreDelegates.string(defaultValue = "hide")
 
-    var hideBlockedContent by DataStoreDelegates.boolean(defaultValue = false)
+    // Default ON: fully hide blocked content.
+    var hideBlockedContent by DataStoreDelegates.boolean(defaultValue = true)
 
     var hideExplore by DataStoreDelegates.boolean(defaultValue = false)
 
