@@ -154,13 +154,13 @@ object SettingsBackup {
     private fun parse(json: String): ParsedBackup {
         val root = JsonParser.parseString(json).asJsonObject
 
-        val prefsObj = root.getAsJsonObject("prefs") ?: JsonObject()
+        val prefsObj = root.getSafeAsJsonObject("prefs") ?: JsonObject()
         val prefs = prefsObj.entrySet().associate { (k, v) ->
             k to jsonElementToAny(v)
         }
 
-        val blocks = root.getAsJsonArray("blocks").decodeList(Block::class.java)
-        val localForums = root.getAsJsonArray("localFollowedForums")
+        val blocks = root.getSafeAsJsonArray("blocks").decodeList(Block::class.java)
+        val localForums = root.getSafeAsJsonArray("localFollowedForums")
             .decodeList(LocalForumManager.LocalForumItem::class.java)
 
         return ParsedBackup(
@@ -170,12 +170,12 @@ object SettingsBackup {
         )
     }
 
-    private fun JsonObject.getAsJsonObject(name: String): JsonObject? {
+    private fun JsonObject.getSafeAsJsonObject(name: String): JsonObject? {
         val el = get(name) ?: return null
         return el.takeIf { it.isJsonObject }?.asJsonObject
     }
 
-    private fun JsonObject.getAsJsonArray(name: String): JsonArray {
+    private fun JsonObject.getSafeAsJsonArray(name: String): JsonArray {
         val el = get(name)
         return el?.takeIf { it.isJsonArray }?.asJsonArray ?: JsonArray()
     }
