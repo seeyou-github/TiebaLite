@@ -124,7 +124,12 @@ class UserProfileViewModel @Inject constructor() :
             TiebaApi.getInstance()
                 .getUserBlackInfoFlow(uid)
                 .map<GetUserBlackInfoBean, UserProfilePartialChange.PermListChange> {
-                    UserProfilePartialChange.PermListChange.Success(it.permList!!)
+                    // When not logged in or request fails, permList can be null.
+                    it.permList?.let { permList ->
+                        UserProfilePartialChange.PermListChange.Success(permList)
+                    } ?: UserProfilePartialChange.PermListChange.Failure(
+                        IllegalStateException("permList is null")
+                    )
                 }
                 .onStart { emit(UserProfilePartialChange.PermListChange.Start) }
                 .catch { emit(UserProfilePartialChange.PermListChange.Failure(it)) }
