@@ -73,13 +73,12 @@
    java.lang.Object readResolve();
 }
 
-#assume no side effects:删除android.util.Log输出的日志
+# assume no side effects: drop verbose/info/warn logs.
+# NOTE: keep Log.d/Log.e for troubleshooting (e.g. tag "test21").
 -assumenosideeffects class android.util.Log {
     public static *** v(...);
-    public static *** d(...);
     public static *** i(...);
     public static *** w(...);
-    public static *** e(...);
 }
 
 # WebView
