@@ -82,40 +82,54 @@ object BlockManager {
         return isBlack
     }
 
-    fun shouldBlock(userId: Long = 0L, userName: String? = null): Boolean {
-        val isWhite = whiteList.any { block ->
+    fun shouldBlock(userId: Long = 0L, userName: String? = null, userNameShow: String? = null): Boolean {
+        // Explicit user whitelist has the highest priority.
+        val isWhiteUser = whiteList.any { block ->
             !block.isRegex &&
-                    block.type == Block.TYPE_USER &&
-                    (block.uid == userId.toString() || block.username == userName)
+                block.type == Block.TYPE_USER &&
+                (block.uid == userId.toString() || block.username == userName || block.username == userNameShow)
         }
-        if (isWhite) return false
+        if (isWhiteUser) return false
 
-        val isBlack = blackList.any { block ->
+        // Keyword blocks should also apply to usernames.
+        // Note: shouldBlock(String) already handles keyword white/black lists.
+        val shouldBlockByName = listOfNotNull(userName, userNameShow)
+            .any { it.isNotBlank() && shouldBlock(it) }
+        if (shouldBlockByName) return true
+
+        val isBlackUser = blackList.any { block ->
             !block.isRegex &&
-                    block.type == Block.TYPE_USER &&
-                    (block.uid == userId.toString() || block.username == userName)
+                block.type == Block.TYPE_USER &&
+                (block.uid == userId.toString() || block.username == userName || block.username == userNameShow)
         }
-        return isBlack
+        return isBlackUser
     }
 
     fun ThreadInfo.shouldBlock(): Boolean =
         shouldBlock(title) || shouldBlock(abstractText) || shouldBlock(
             authorId.takeIf { it != 0L } ?: (author?.id ?: -1),
-            author?.name?.ifEmpty { author.nameShow })
+            author?.name,
+            author?.nameShow,
+        )
 
     fun Post.shouldBlock(): Boolean =
         shouldBlock(content.plainText) || shouldBlock(
             author_id.takeIf { it != 0L } ?: (author?.id ?: -1),
-            author?.name?.ifEmpty { author.nameShow })
+            author?.name,
+            author?.nameShow,
+        )
 
     fun SubPostList.shouldBlock(): Boolean =
         shouldBlock(content.plainText) || shouldBlock(
             author_id.takeIf { it != 0L } ?: (author?.id ?: -1),
-            author?.name?.ifEmpty { author.nameShow })
+            author?.name,
+            author?.nameShow,
+        )
 
     fun MessageListBean.MessageInfoBean.shouldBlock(): Boolean =
         shouldBlock(content.orEmpty()) || shouldBlock(
             this.replyer?.id?.toLongOrNull() ?: -1,
-            this.replyer?.name?.ifEmpty { this.replyer.nameShow }
+            this.replyer?.name,
+            this.replyer?.nameShow,
         )
 }
