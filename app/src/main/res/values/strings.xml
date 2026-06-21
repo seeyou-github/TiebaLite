@@ -371,8 +371,6 @@
     <string name="summary_not_logged_in">未登录，点击登录</string>
     <string name="title_settings_more">更多</string>
 
-    <string name="title_settings_import_export">导入导出</string>
-    <string name="summary_settings_import_export">导出或导入全部配置</string>
     <string name="title_export_settings">导出配置</string>
     <string name="summary_export_settings">导出设置、屏蔽列表、本地关注吧</string>
     <string name="title_import_settings">导入配置</string>

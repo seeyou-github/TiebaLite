@@ -266,25 +266,6 @@ fun SettingsPage(
                 }
                 prefsItem {
                     TextPref(
-                        title = stringResource(id = R.string.title_settings_import_export),
-                        summary = stringResource(id = R.string.summary_settings_import_export),
-                        leadingIcon = {
-                            LeadingIcon {
-                                AvatarIcon(
-                                    icon = Icons.Rounded.Download,
-                                    size = Sizes.Small,
-                                    contentDescription = null,
-                                )
-                            }
-                        },
-                        darkenOnDisable = false,
-                        onClick = {
-                            // no-op; keep as header-like item if needed
-                        }
-                    )
-                }
-                prefsItem {
-                    TextPref(
                         title = stringResource(id = R.string.title_export_settings),
                         summary = stringResource(id = R.string.summary_export_settings),
                         leadingIcon = {
