@@ -92,13 +92,13 @@ android {
             signingConfig = signingConfigs.getByName("config")
         }
         release {
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            isDebuggable = true
+            isDebuggable = false
             isJniDebuggable = false
             multiDexEnabled = true
             signingConfig = signingConfigs.getByName("config")
