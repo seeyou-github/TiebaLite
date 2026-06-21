@@ -141,12 +141,14 @@ object ThemeUtil {
         if (isNightMode()) {
             switchTheme(getOldTheme(), recordOldTheme = false)
         } else {
-            switchTheme(dataStore.getString(KEY_DARK_THEME, THEME_AMOLED_DARK))
+            // Default night theme: "静谧蓝" (blue_dark)
+            switchTheme(dataStore.getString(KEY_DARK_THEME, THEME_BLUE_DARK))
         }
     }
 
     fun switchToNightMode(context: Activity, recreate: Boolean) {
-        switchTheme(dataStore.getString(KEY_DARK_THEME, THEME_AMOLED_DARK))
+        // Default night theme: "静谧蓝" (blue_dark)
+        switchTheme(dataStore.getString(KEY_DARK_THEME, THEME_BLUE_DARK))
         if (recreate) {
             refreshUI(context)
         }
