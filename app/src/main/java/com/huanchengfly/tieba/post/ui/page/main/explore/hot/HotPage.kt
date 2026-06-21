@@ -300,7 +300,7 @@ fun HotPage(
                                 onClick = {
                                     navigator.navigate(
                                         ThreadPageDestination(
-                                            threadId = it.id,
+                                            threadId = it.threadId,
                                             threadInfo = it
                                         )
                                     )
@@ -308,7 +308,7 @@ fun HotPage(
                                 onClickReply = {
                                     navigator.navigate(
                                         ThreadPageDestination(
-                                            threadId = it.id,
+                                            threadId = it.threadId,
                                             scrollToReply = true
                                         )
                                     )
@@ -324,7 +324,7 @@ fun HotPage(
                                 },
                                 onClickForum = { navigator.navigate(ForumPageDestination(it.name)) },
                                 onClickUser = { navigator.navigate(UserProfilePageDestination(it.id)) },
-                            ) {
+                                dislikeAction = {
                                 Column(
                                     horizontalAlignment = Alignment.End,
                                     verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -352,7 +352,8 @@ fun HotPage(
                                         color = color
                                     )
                                 }
-                            }
+                            },
+                            )
                         }
 //                        ThreadListItem(
 //                            index = index,

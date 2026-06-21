@@ -352,7 +352,7 @@ private fun FeedList(
                                         }
                                     },
                                     onClickUser = onClickUser,
-                                ) {
+                                    dislikeAction = {
                                     if (personalized != null) {
                                         Dislike(
                                             personalized = personalized,
@@ -361,7 +361,8 @@ private fun FeedList(
                                             }
                                         )
                                     }
-                                }
+                                    },
+                                )
                                 if (showDivider) {
                                     VerticalDivider(
                                         modifier = Modifier.padding(horizontal = 16.dp),
