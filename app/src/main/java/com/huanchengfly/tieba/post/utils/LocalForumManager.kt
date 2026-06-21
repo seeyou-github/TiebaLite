@@ -5,13 +5,18 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.huanchengfly.tieba.post.App
 
+import com.google.gson.annotations.SerializedName
+
 object LocalForumManager {
     private const val PREFS_NAME = "local_followed_forums"
     private const val KEY_FORUMS = "followed_list"
 
     data class LocalForumItem(
+        @SerializedName("forumName", alternate = ["a"])
         val forumName: String,
+        @SerializedName("avatar", alternate = ["b"])
         val avatar: String = "",
+        @SerializedName("timestamp", alternate = ["c"])
         val timestamp: Long = System.currentTimeMillis()
     )
 

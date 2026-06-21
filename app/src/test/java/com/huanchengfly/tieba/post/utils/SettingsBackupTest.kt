@@ -63,5 +63,51 @@ class SettingsBackupTest {
         
         val blocks2 = blocksField.get(parsedBackup2) as List<*>
         assertTrue(blocks2.isEmpty())
+
+        // 3. Test old compressed format with "a", "b", "c" as keys
+        val jsonOldCompressed = """
+            {
+                "a": {
+                    "hideExplore": false,
+                    "defaultStart": 0
+                },
+                "b": [
+                    {
+                        "category": 10,
+                        "id": 1,
+                        "isRegex": false,
+                        "keywords": "[\"xcvfvf\"]",
+                        "type": 0
+                    }
+                ],
+                "c": [
+                    {
+                        "a": "地方",
+                        "b": "https://tiebapic.baidu.com/avatar.jpg",
+                        "c": 1782044583323
+                    }
+                ]
+            }
+        """.trimIndent()
+
+        val parsedBackup3 = parseMethod.invoke(SettingsBackup, jsonOldCompressed)
+        assertNotNull(parsedBackup3)
+
+        val prefs3 = prefsField.get(parsedBackup3) as Map<*, *>
+        assertEquals(false, prefs3["hideExplore"])
+        assertEquals(0.0, prefs3["defaultStart"]) // parsed as Double via Gson element mapping
+
+        val blocks3 = blocksField.get(parsedBackup3) as List<*>
+        assertEquals(1, blocks3.size)
+        val blockObj = blocks3[0] as com.huanchengfly.tieba.post.models.database.Block
+        assertEquals(10, blockObj.category)
+        assertEquals("[\"xcvfvf\"]", blockObj.keywords)
+
+        val localFollowedForums3 = localFollowedForumsField.get(parsedBackup3) as List<*>
+        assertEquals(1, localFollowedForums3.size)
+        val forumItem = localFollowedForums3[0] as LocalForumManager.LocalForumItem
+        assertEquals("地方", forumItem.forumName)
+        assertEquals("https://tiebapic.baidu.com/avatar.jpg", forumItem.avatar)
+        assertEquals(1782044583323L, forumItem.timestamp)
     }
 }

@@ -154,13 +154,17 @@ object SettingsBackup {
     private fun parse(json: String): ParsedBackup {
         val root = JsonParser.parseString(json).asJsonObject
 
-        val prefsObj = root.getSafeAsJsonObject("prefs") ?: JsonObject()
+        // Support both old/compressed format (a, b, c) and new format (prefs, blocks, localFollowedForums)
+        val prefsObj = (root.getSafeAsJsonObject("prefs") ?: root.getSafeAsJsonObject("a")) ?: JsonObject()
         val prefs = prefsObj.entrySet().associate { (k, v) ->
             k to jsonElementToAny(v)
         }
 
-        val blocks = root.getSafeAsJsonArray("blocks").decodeList(Block::class.java)
-        val localForums = root.getSafeAsJsonArray("localFollowedForums")
+        val blocks = (root.getSafeAsJsonArray("blocks").takeIf { it.size() > 0 }
+            ?: root.getSafeAsJsonArray("b"))
+            .decodeList(Block::class.java)
+        val localForums = (root.getSafeAsJsonArray("localFollowedForums").takeIf { it.size() > 0 }
+            ?: root.getSafeAsJsonArray("c"))
             .decodeList(LocalForumManager.LocalForumItem::class.java)
 
         return ParsedBackup(
