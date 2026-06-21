@@ -11,7 +11,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Terminal
 import androidx.compose.material.icons.outlined.OfflineBolt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -107,24 +106,6 @@ fun MoreSettingsPage(
                     )
                 }
             }
-            prefsItem {
-                SwitchPref(
-                    leadingIcon = {
-                        LeadingIcon {
-                            AvatarIcon(
-                                icon = Icons.Outlined.Terminal,
-                                size = Sizes.Small,
-                                contentDescription = null,
-                            )
-                        }
-                    },
-                    key = "test21_log_enabled",
-                    title = stringResource(id = R.string.title_test21_log),
-                    defaultChecked = false,
-                    summary = stringResource(id = R.string.summary_test21_log),
-                )
-            }
-
             prefsItem {
                 SwitchPref(
                     leadingIcon = {
