@@ -76,8 +76,8 @@ object SettingsBackup {
         withContext(Dispatchers.IO) {
             DatabaseUtil.deleteAllBlocks()
             backup.blocks.forEach { block ->
-                // Keep ids stable in export, but Room insert might ignore it; ok.
-                DatabaseUtil.insertBlock(block)
+                // Re-generate ids on import to avoid any PK/sequence edge cases.
+                DatabaseUtil.insertBlock(block.copy(id = 0L))
             }
             BlockManager.init()
         }
