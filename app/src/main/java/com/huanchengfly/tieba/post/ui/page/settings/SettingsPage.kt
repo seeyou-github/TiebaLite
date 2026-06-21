@@ -11,8 +11,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Download
+import androidx.compose.material.icons.rounded.UploadFile
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,12 +42,23 @@ import com.huanchengfly.tieba.post.ui.page.destinations.PrivacySettingsPageDesti
 import com.huanchengfly.tieba.post.ui.widgets.compose.Avatar
 import com.huanchengfly.tieba.post.ui.widgets.compose.AvatarIcon
 import com.huanchengfly.tieba.post.ui.widgets.compose.BackNavigationIcon
+import com.huanchengfly.tieba.post.ui.widgets.compose.LocalSnackbarHostState
 import com.huanchengfly.tieba.post.ui.widgets.compose.Sizes
 import com.huanchengfly.tieba.post.ui.widgets.compose.TitleCentredToolbar
 import com.huanchengfly.tieba.post.utils.AccountUtil.LocalAccount
+import com.huanchengfly.tieba.post.utils.SettingsBackup
 import com.huanchengfly.tieba.post.utils.StringUtil
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.launch
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
 internal fun LeadingIcon(
@@ -110,6 +124,50 @@ fun SettingsPage(
     navigator: DestinationsNavigator,
 ) {
     ProvideNavigator(navigator = navigator) {
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
+        val snackbarHostState = LocalSnackbarHostState.current
+
+        var pendingExportJson by remember { mutableStateOf<String?>(null) }
+        val exportLauncher = rememberLauncherForActivityResult(
+            ActivityResultContracts.CreateDocument("application/json")
+        ) { uri ->
+            val json = pendingExportJson
+            pendingExportJson = null
+            if (uri == null || json == null) return@rememberLauncherForActivityResult
+
+            runCatching {
+                context.contentResolver.openOutputStream(uri)?.use { os ->
+                    os.write(json.toByteArray(Charsets.UTF_8))
+                }
+            }.onSuccess {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(context.getString(R.string.toast_export_success))
+                }
+            }.onFailure {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(context.getString(R.string.toast_export_failed))
+                }
+            }
+        }
+
+        val importLauncher = rememberLauncherForActivityResult(
+            ActivityResultContracts.OpenDocument()
+        ) { uri ->
+            if (uri == null) return@rememberLauncherForActivityResult
+            coroutineScope.launch {
+                runCatching {
+                    val json = context.contentResolver.openInputStream(uri)?.use { it.readBytes().toString(Charsets.UTF_8) }
+                        ?: error("empty file")
+                    SettingsBackup.importAndOverwrite(context, json)
+                }.onSuccess {
+                    snackbarHostState.showSnackbar(context.getString(R.string.toast_import_success))
+                }.onFailure {
+                    snackbarHostState.showSnackbar(context.getString(R.string.toast_import_failed))
+                }
+            }
+        }
+
         Scaffold(
             backgroundColor = Color.Transparent,
             topBar = {
@@ -127,7 +185,7 @@ fun SettingsPage(
             },
         ) {
             PrefsScreen(
-                dataStore = LocalContext.current.dataStore,
+                dataStore = context.dataStore,
                 dividerThickness = 0.dp,
                 modifier = Modifier
                     .padding(it)
@@ -202,6 +260,71 @@ fun SettingsPage(
                         },
                         darkenOnDisable = false,
                         onClick = { navigator.navigate(PrivacySettingsPageDestination) }
+                    )
+                }
+                prefsItem {
+                    TextPref(
+                        title = stringResource(id = R.string.title_settings_import_export),
+                        summary = stringResource(id = R.string.summary_settings_import_export),
+                        leadingIcon = {
+                            LeadingIcon {
+                                AvatarIcon(
+                                    icon = Icons.Rounded.Download,
+                                    size = Sizes.Small,
+                                    contentDescription = null,
+                                )
+                            }
+                        },
+                        darkenOnDisable = false,
+                        onClick = {
+                            // no-op; keep as header-like item if needed
+                        }
+                    )
+                }
+                prefsItem {
+                    TextPref(
+                        title = stringResource(id = R.string.title_export_settings),
+                        summary = stringResource(id = R.string.summary_export_settings),
+                        leadingIcon = {
+                            LeadingIcon {
+                                AvatarIcon(
+                                    icon = Icons.Rounded.Download,
+                                    size = Sizes.Small,
+                                    contentDescription = null,
+                                )
+                            }
+                        },
+                        darkenOnDisable = false,
+                        onClick = {
+                            coroutineScope.launch {
+                                runCatching {
+                                    val json = SettingsBackup.export(context)
+                                    pendingExportJson = json
+                                    exportLauncher.launch("tieba-lite-settings.json")
+                                }.onFailure {
+                                    snackbarHostState.showSnackbar(context.getString(R.string.toast_export_failed))
+                                }
+                            }
+                        }
+                    )
+                }
+                prefsItem {
+                    TextPref(
+                        title = stringResource(id = R.string.title_import_settings),
+                        summary = stringResource(id = R.string.summary_import_settings),
+                        leadingIcon = {
+                            LeadingIcon {
+                                AvatarIcon(
+                                    icon = Icons.Rounded.UploadFile,
+                                    size = Sizes.Small,
+                                    contentDescription = null,
+                                )
+                            }
+                        },
+                        darkenOnDisable = false,
+                        onClick = {
+                            importLauncher.launch(arrayOf("application/json"))
+                        }
                     )
                 }
                 prefsItem {

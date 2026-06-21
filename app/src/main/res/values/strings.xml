@@ -370,6 +370,18 @@
     <string name="summary_now_account">已登录账号 %s</string>
     <string name="summary_not_logged_in">未登录，点击登录</string>
     <string name="title_settings_more">更多</string>
+
+    <string name="title_settings_import_export">导入导出</string>
+    <string name="summary_settings_import_export">导出或导入全部配置</string>
+    <string name="title_export_settings">导出配置</string>
+    <string name="summary_export_settings">导出设置、屏蔽列表、本地关注吧</string>
+    <string name="title_import_settings">导入配置</string>
+    <string name="summary_import_settings">从 JSON 导入并覆盖现有配置</string>
+
+    <string name="toast_export_success">导出成功</string>
+    <string name="toast_export_failed">导出失败</string>
+    <string name="toast_import_success">导入成功</string>
+    <string name="toast_import_failed">导入失败</string>
     <string name="summary_block_settings">眼不见心不烦</string>
     <string name="summary_settings_custom">个性你的 UI 界面</string>
     <string name="summary_settings_habit">万般功能不如自己顺手</string>

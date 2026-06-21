@@ -60,6 +60,8 @@ object DatabaseUtil {
 
     suspend fun deleteBlockById(id: Long) = appDatabase.blockDao().deleteById(id)
 
+    suspend fun deleteAllBlocks() = appDatabase.blockDao().deleteAll()
+
     // ── Draft ───────────────────────────────────────────────────
     suspend fun getDraft(hash: String): Draft? = appDatabase.draftDao().getByHash(hash)
 

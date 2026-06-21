@@ -52,4 +52,8 @@ object LocalForumManager {
         val json = gson.toJson(list)
         getPrefs().edit().putString(KEY_FORUMS, json).apply()
     }
+
+    fun overwriteFollowedForums(list: List<LocalForumItem>) {
+        saveList(list)
+    }
 }

@@ -47,6 +47,8 @@ object BlockManager {
     }
 
     suspend fun init() {
+        // Keep idempotent for "re-init" after imports.
+        blockList.clear()
         blockList.addAll(DatabaseUtil.getAllBlocks())
     }
 
