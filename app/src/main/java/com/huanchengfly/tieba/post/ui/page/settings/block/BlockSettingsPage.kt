@@ -28,6 +28,7 @@ import com.huanchengfly.tieba.post.ui.widgets.compose.BackNavigationIcon
 import com.huanchengfly.tieba.post.ui.widgets.compose.MyScaffold
 import com.huanchengfly.tieba.post.ui.widgets.compose.Sizes
 import com.huanchengfly.tieba.post.ui.widgets.compose.TitleCentredToolbar
+import com.huanchengfly.tieba.post.utils.appPreferences
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -80,7 +81,7 @@ fun BlockSettingsPage(
                 SwitchPref(
                     key = "hideBlockedContent",
                     title = stringResource(id = R.string.settings_hide_blocked_content),
-                    defaultChecked = false
+                    defaultChecked = context.appPreferences.hideBlockedContent
                 ) {
                     LeadingIcon {
                         AvatarIcon(
