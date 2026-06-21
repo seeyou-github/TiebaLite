@@ -41,6 +41,7 @@ import com.huanchengfly.tieba.post.ui.widgets.compose.MyScaffold
 import com.huanchengfly.tieba.post.ui.widgets.compose.Sizes
 import com.huanchengfly.tieba.post.ui.widgets.compose.TitleCentredToolbar
 import com.huanchengfly.tieba.post.utils.ThemeUtil
+import com.huanchengfly.tieba.post.utils.appPreferences
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -184,7 +185,7 @@ fun CustomSettingsPage(
                     key = "do_not_load_avatar",
                     title = stringResource(id = R.string.title_settings_do_not_load_avatar),
                     summary = stringResource(id = R.string.summary_settings_do_not_load_avatar),
-                    defaultChecked = false,
+                    defaultChecked = context.appPreferences.doNotLoadAvatar,
                     leadingIcon = {
                         LeadingIcon {
                             AvatarIcon(
