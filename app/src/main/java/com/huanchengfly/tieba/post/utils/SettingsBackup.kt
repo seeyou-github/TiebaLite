@@ -9,6 +9,10 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import com.huanchengfly.tieba.post.dataStore
 import com.huanchengfly.tieba.post.models.database.Block
@@ -18,6 +22,12 @@ import kotlinx.coroutines.flow.first
 
 object SettingsBackup {
     private val gson = Gson()
+
+    private data class ParsedBackup(
+        val prefs: Map<String, Any?>,
+        val blocks: List<Block>,
+        val localFollowedForums: List<LocalForumManager.LocalForumItem>,
+    )
 
     data class Backup(
         val prefs: Map<String, Any?> = emptyMap(),
@@ -55,8 +65,7 @@ object SettingsBackup {
 
     suspend fun importAndOverwrite(context: Context, json: String) {
         Test21Log.d(context, "import: start jsonBytes=${json.toByteArray(Charsets.UTF_8).size}")
-        val type = object : TypeToken<Backup>() {}.type
-        val backup = runCatching { gson.fromJson<Backup>(json, type) }
+        val backup = runCatching { parse(json) }
             .onFailure { Test21Log.e(context, "import: parse failed", it) }
             .getOrNull() ?: throw IllegalArgumentException("invalid json")
 
@@ -137,5 +146,61 @@ object SettingsBackup {
                 else -> v?.toString()
             }
         }
+    }
+
+    /**
+     * Parse without relying on generic signatures (R8 may strip/obfuscate them in release).
+     */
+    private fun parse(json: String): ParsedBackup {
+        val root = JsonParser.parseString(json).asJsonObject
+
+        val prefsObj = root.getAsJsonObject("prefs") ?: JsonObject()
+        val prefs = prefsObj.entrySet().associate { (k, v) ->
+            k to jsonElementToAny(v)
+        }
+
+        val blocks = root.getAsJsonArray("blocks").decodeList(Block::class.java)
+        val localForums = root.getAsJsonArray("localFollowedForums")
+            .decodeList(LocalForumManager.LocalForumItem::class.java)
+
+        return ParsedBackup(
+            prefs = prefs,
+            blocks = blocks,
+            localFollowedForums = localForums,
+        )
+    }
+
+    private fun JsonObject.getAsJsonObject(name: String): JsonObject? {
+        val el = get(name) ?: return null
+        return el.takeIf { it.isJsonObject }?.asJsonObject
+    }
+
+    private fun JsonObject.getAsJsonArray(name: String): JsonArray {
+        val el = get(name)
+        return el?.takeIf { it.isJsonArray }?.asJsonArray ?: JsonArray()
+    }
+
+    private fun <T> JsonArray.decodeList(clazz: Class<T>): List<T> {
+        if (size() == 0) return emptyList()
+        val out = ArrayList<T>(size())
+        for (el in this) {
+            out.add(gson.fromJson(el, clazz))
+        }
+        return out
+    }
+
+    private fun jsonElementToAny(el: JsonElement?): Any? {
+        if (el == null || el.isJsonNull) return null
+        if (el.isJsonPrimitive) {
+            val p = el.asJsonPrimitive
+            return when {
+                p.isBoolean -> p.asBoolean
+                p.isNumber -> p.asDouble
+                p.isString -> p.asString
+                else -> p.toString()
+            }
+        }
+        // Keep non-primitives stable as json strings.
+        return el.toString()
     }
 }
