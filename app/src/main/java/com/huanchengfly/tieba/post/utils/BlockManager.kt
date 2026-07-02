@@ -167,10 +167,13 @@ object BlockManager {
     }
 
     fun ThreadInfo.shouldBlock(): Boolean {
-        val titlePreview = if (title.length > 100) title.take(100) + "..." else title
+        val displayTitle = listOf(tabName, title)
+            .filter { it.isNotBlank() }
+            .joinToString(separator = " | ")
+        val titlePreview = if (displayTitle.length > 100) displayTitle.take(100) + "..." else displayTitle
         val absPreview = if (abstractText.length > 100) abstractText.take(100) + "..." else abstractText
         Log.d(TAG, ">> ThreadInfo.shouldBlock() title=[$titlePreview] abstract=[$absPreview] authorId=$authorId author=${author?.name}")
-        val result = shouldBlock(title) || shouldBlock(abstractText) || shouldBlock(
+        val result = shouldBlock(displayTitle) || shouldBlock(abstractText) || shouldBlock(
             authorId.takeIf { it != 0L } ?: (author?.id ?: -1),
             author?.name,
             author?.nameShow,
