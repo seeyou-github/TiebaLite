@@ -1,6 +1,7 @@
 package com.huanchengfly.tieba.post.ui.widgets.compose
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +10,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -45,10 +50,12 @@ fun BlockableContent(
     hideBlockedContent: Boolean = LocalContext.current.appPreferences.hideBlockedContent,
     content: @Composable () -> Unit,
 ) {
-    if (!blocked) {
+    var revealed by remember { mutableStateOf(false) }
+
+    if (!blocked || revealed) {
         content()
     } else if (!hideBlockedContent) {
-        Column(modifier = modifier) {
+        Column(modifier = modifier.clickable { revealed = true }) {
             blockedTip()
         }
     }
